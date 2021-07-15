@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ЛофтДеньги</string>
+    <string name="edittext_title_hint">Название</string>
+    <string name="edittext_price_hint">Цена</string>
+    <string name="button_add_text">Добавить</string>
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddItemActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/add_button"
+        android:layout_marginLeft="33dp"
+        android:layout_marginRight="104dp"
+        android:layout_marginBottom="61dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edittext_title_hint"
+            android:textColor="@color/hint_color"
+            android:visibility="invisible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:hint="@string/edittext_title_hint"
+            android:textSize="@dimen/font_normal"
+            android:textColorHint="@color/hint_color"
+            android:textColor="@color/text_color"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edittext_price_hint"
+            android:textColor="@color/hint_color"
+            android:visibility="invisible"
+            />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/edittext_price_hint"
+            android:textSize="@dimen/font_normal"
+            android:inputType="number"
+            android:textColorHint="@color/hint_color"
+            android:textColor="@color/text_color"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="@string/button_add_text"
+        android:textSize="@dimen/font_small"
+        android:textColor="@color/white_three"
+        android:backgroundTint="@color/white"
+        android:clickable="false"
+        />
+
+
+</RelativeLayout>
