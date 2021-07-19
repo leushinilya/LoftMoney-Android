@@ -18,6 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edittext_title_hint"
+            android:textSize="@dimen/font_12"
             android:textColor="@color/hint_color"
             android:visibility="invisible"
             />
@@ -27,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="18dp"
             android:hint="@string/edittext_title_hint"
-            android:textSize="@dimen/font_normal"
+            android:textSize="@dimen/font_24"
             android:textColorHint="@color/hint_color"
             android:textColor="@color/text_color"/>
 
@@ -35,6 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edittext_price_hint"
+            android:textSize="@dimen/font_12"
             android:textColor="@color/hint_color"
             android:visibility="invisible"
             />
@@ -43,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/edittext_price_hint"
-            android:textSize="@dimen/font_normal"
+            android:textSize="@dimen/font_24"
             android:inputType="number"
             android:textColorHint="@color/hint_color"
             android:textColor="@color/text_color"/>
@@ -56,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text="@string/button_add_text"
-        android:textSize="@dimen/font_small"
+        android:textSize="@dimen/font_14"
         android:textColor="@color/white_three"
         android:backgroundTint="@color/white"
         android:clickable="false"
