@@ -14,11 +14,11 @@ import ru.skillbranch.loftmoney.R;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MoneyViewHolder>{
 
-    private List<MoneyItem> moneyItemList = new ArrayList<>();
+    private List<Item> itemList = new ArrayList<>();
 
-    public void setData(List<MoneyItem> moneyItems){
-        moneyItemList.clear();
-        moneyItemList = moneyItems;
+    public void setData(List<Item> items){
+        itemList.clear();
+        itemList = items;
         notifyDataSetChanged();
     }
 
@@ -30,12 +30,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MoneyViewHol
 
     @Override
     public void onBindViewHolder(ItemsAdapter.MoneyViewHolder holder, int position) {
-        holder.bind(moneyItemList.get(position));
+        holder.bind(itemList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return moneyItemList.size();
+        return itemList.size();
     }
 
     static class MoneyViewHolder extends RecyclerView.ViewHolder{
@@ -48,9 +48,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.MoneyViewHol
             volumeTextView = itemView.findViewById(R.id.moneyCellVolumeView);
         }
 
-        public void bind(MoneyItem moneyItem){
-            titleTextView.setText(moneyItem.getTitle());
-            volumeTextView.setText(moneyItem.getValue());
+        public void bind(Item item){
+            titleTextView.setText(item.getName());
+            volumeTextView.setText(item.getPrice());
+            if(item.getType().equals("income")){
+                volumeTextView.setTextColor(itemView.getResources().getColor(R.color.apple_green));
+            }
         }
     };
 }
