@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Loftmoney">
 
-        <activity android:name=".AddItemActivity"></activity>
+        <activity android:name=".AddItemActivity" />
 
         <activity android:name=".MainActivity">
             <intent-filter>

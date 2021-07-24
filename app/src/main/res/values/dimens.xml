@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="font_normal">24sp</dimen>
-    <dimen name="font_small">14sp</dimen>
-    <dimen name="font_tiny">14sp</dimen>
+<!--    fonts-->
+    <dimen name="font_24">24sp</dimen>
+    <dimen name="font_20">20sp</dimen>
+    <dimen name="font_14">14sp</dimen>
+    <dimen name="font_12">12sp</dimen>
+    <dimen name="font_10">10sp</dimen>
+
+<!--    sizes-->
+    <dimen name="spacing_24">24dp</dimen>
+    <dimen name="spacing_16">16dp</dimen>
 </resources>

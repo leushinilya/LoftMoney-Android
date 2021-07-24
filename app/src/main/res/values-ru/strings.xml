@@ -3,4 +3,13 @@
     <string name="edittext_title_hint">Название</string>
     <string name="edittext_price_hint">Цена</string>
     <string name="button_add_text">Добавить</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <array name="main_pager_titles">
+        <item>Расходы</item>
+        <item>Доходы</item>
+        <item>Баланс</item>
+    </array>
+
 </resources>
