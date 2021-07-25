@@ -1,4 +1,4 @@
-package ru.skillbranch.loftmoney;
+package ru.leushinilya.loftmoney;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,16 +16,24 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-import ru.skillbranch.loftmoney.cells.Item;
-import ru.skillbranch.loftmoney.cells.ItemsAdapter;
+import ru.leushinilya.loftmoney.cells.Item;
+import ru.leushinilya.loftmoney.cells.ItemsAdapter;
 
 public class BudgetFragment extends Fragment implements View.OnClickListener {
+
+    private final int REQUEST_CODE = 1;
 
     RecyclerView itemsView;
     FloatingActionButton addFab;
     ItemsAdapter itemsAdapter = new ItemsAdapter();
-    String type;
+    private int currentPosition;
     ArrayList<Item> itemList = new ArrayList<>();
+
+    public static BudgetFragment newInstance(int position) {
+        BudgetFragment budgetFragment = new BudgetFragment();
+        budgetFragment.currentPosition = position;
+        return budgetFragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,10 +46,8 @@ public class BudgetFragment extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
         itemsView = view.findViewById(R.id.itemsView);
         addFab = view.findViewById(R.id.add_fab);
-        type = getArguments().getString("type");
         addFab.setOnClickListener(this);
         configureRecyclerView();
-        updateList();
         itemsAdapter.setData(itemList);
     }
 
@@ -60,20 +67,18 @@ public class BudgetFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v.getId() == R.id.add_fab) {
             Intent intent = new Intent(getActivity(), AddItemActivity.class);
-            intent.putExtra("type", this.type);
-            intent.putExtra("itemList", itemList);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CODE);
         }
     }
 
-    private void updateList() {
-        if (getArguments().getSerializable("incomesItemList") != null && type.equals("income")) {
-            itemList = (ArrayList<Item>) getArguments().getSerializable("incomesItemList");
-        }
-
-        if (getArguments().getSerializable("expensesItemList") != null && type.equals("expense")) {
-            itemList = (ArrayList<Item>) getArguments().getSerializable("expensesItemList");
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            String name = data.getStringExtra("name");
+            String price = data.getStringExtra("price");
+            itemList.add(new Item(name, price, currentPosition));
+            itemsAdapter.setData(itemList);
         }
     }
-
 }

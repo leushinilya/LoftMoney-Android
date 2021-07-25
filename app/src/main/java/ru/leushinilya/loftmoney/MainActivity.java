@@ -1,4 +1,4 @@
-package ru.skillbranch.loftmoney;
+package ru.leushinilya.loftmoney;
 
 import android.os.Bundle;
 
@@ -41,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
 
     private class MainPagerAdapter extends FragmentStateAdapter {
 
-        String[] types = {"expense", "income"};
-
         public MainPagerAdapter(FragmentActivity fragmentActivity) {
             super(fragmentActivity);
         }
@@ -51,19 +49,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment createFragment(int position) {
             if (position == 2) return new BalanceFragment();
             else {
-                BudgetFragment budgetFragment = new BudgetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", types[position]);
-
-                if (getIntent().hasExtra("incomesItemList") && position == 1) {
-                    bundle.putSerializable("incomesItemList", getIntent().getExtras().getSerializable("incomesItemList"));
-                }
-
-                if (getIntent().hasExtra("expensesItemList") && position == 0) {
-                    bundle.putSerializable("expensesItemList", getIntent().getExtras().getSerializable("expensesItemList"));
-                }
-
-                budgetFragment.setArguments(bundle);
+                BudgetFragment budgetFragment = BudgetFragment.newInstance(position);
                 return budgetFragment;
             }
         }

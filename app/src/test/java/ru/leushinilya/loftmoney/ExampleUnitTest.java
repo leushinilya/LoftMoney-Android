@@ -1,4 +1,4 @@
-package ru.skillbranch.loftmoney;
+package ru.leushinilya.loftmoney;
 
 import org.junit.Test;
 

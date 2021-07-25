@@ -1,12 +1,13 @@
-package ru.skillbranch.loftmoney.cells;
+package ru.leushinilya.loftmoney.cells;
 
 import java.io.Serializable;
 
 public class Item implements Serializable {
 
-    private final String name, price, type;
+    private final String name, price;
+    int type;
 
-    public Item(String name, String price, String type) {
+    public Item(String name, String price, int type) {
         this.name = name;
         this.price = price;
         this.type = type;
@@ -21,7 +22,7 @@ public class Item implements Serializable {
         return price;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 }
