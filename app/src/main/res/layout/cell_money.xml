@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/spacing_24">
 
     <TextView
-        android:id="@+id/moneyCellTitleView"
+        android:id="@+id/moneyCellNameView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|left"
@@ -17,7 +17,7 @@
         android:layout_weight="1"/>
 
     <TextView
-        android:id="@+id/moneyCellVolumeView"
+        android:id="@+id/moneyCellPriceView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical|right"

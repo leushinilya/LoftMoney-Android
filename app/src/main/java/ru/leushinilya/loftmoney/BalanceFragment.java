@@ -1,4 +1,4 @@
-package ru.skillbranch.loftmoney;
+package ru.leushinilya.loftmoney;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
