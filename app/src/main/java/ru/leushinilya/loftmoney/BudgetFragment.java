@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -16,12 +17,20 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import ru.leushinilya.loftmoney.cells.Item;
 import ru.leushinilya.loftmoney.cells.ItemsAdapter;
+import ru.leushinilya.loftmoney.remote.InternetResponse;
+import ru.leushinilya.loftmoney.remote.RemoteItem;
 
 public class BudgetFragment extends Fragment implements View.OnClickListener {
 
     private final int REQUEST_CODE = 1;
+    final CompositeDisposable compositeDisposable= new CompositeDisposable();
 
     RecyclerView itemsView;
     FloatingActionButton addFab;
@@ -48,7 +57,28 @@ public class BudgetFragment extends Fragment implements View.OnClickListener {
         addFab = view.findViewById(R.id.add_fab);
         addFab.setOnClickListener(this);
         configureRecyclerView();
-        itemsAdapter.setData(itemList);
+        updateListFromInternet(currentPosition);
+    }
+
+    private void updateListFromInternet(int currentPosition) {
+        String type = "income";
+        if(currentPosition == 0) type = "expense";
+        Disposable disposable = ((LoftApp)getActivity().getApplication()).internetAPI.getItems(type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(internetResponse -> {
+                    if(internetResponse.getStatus().equals("success")){
+                        ArrayList<RemoteItem> remoteItems = internetResponse.getRemoteItems();
+                        for (RemoteItem remoteItem: remoteItems) {
+                            itemList.add(Item.getInstance(remoteItem));
+                            itemsAdapter.setData(itemList);
+                        }
+                    } else Toast.makeText(getActivity(), R.string.connection_lost, Toast.LENGTH_LONG);
+                }, throwable -> {
+                    Toast.makeText(getActivity(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG);
+                });
+
+        compositeDisposable.add(disposable);
     }
 
     private void configureRecyclerView() {
@@ -81,4 +111,5 @@ public class BudgetFragment extends Fragment implements View.OnClickListener {
             itemsAdapter.setData(itemList);
         }
     }
+
 }
