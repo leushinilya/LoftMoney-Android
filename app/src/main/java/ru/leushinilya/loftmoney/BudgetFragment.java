@@ -1,13 +1,11 @@
 package ru.leushinilya.loftmoney;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -65,7 +63,7 @@ public class BudgetFragment extends Fragment {
         updateListFromInternet(currentPosition);
     }
 
-    private void updateListFromInternet(int currentPosition) {
+    public void updateListFromInternet(int currentPosition) {
         String type = "income";
         if (currentPosition == 0) type = "expense";
         Disposable disposable = ((LoftApp) getActivity().getApplication()).internetAPI.getItems(type)
@@ -102,17 +100,6 @@ public class BudgetFragment extends Fragment {
         DividerItemDecoration divider = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         itemsView.addItemDecoration(divider);
 
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            String name = data.getStringExtra("name");
-            String price = data.getStringExtra("price");
-            itemList.add(new Item(name, price, currentPosition));
-            itemsAdapter.setData(itemList);
-        }
     }
 
 }

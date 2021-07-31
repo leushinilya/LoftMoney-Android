@@ -8,14 +8,24 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class AddItemActivity extends AppCompatActivity implements TextWatcher {
 
     Button addButton;
     EditText nameEditText, priceEditText;
     int inputColor;
+    String type = "expense";
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,17 +41,17 @@ public class AddItemActivity extends AppCompatActivity implements TextWatcher {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("name", nameEditText.getText().toString());
-                intent.putExtra("price", priceEditText.getText().toString());
-                setResult(RESULT_OK, intent);
-                finish();
+                putItemToInternet();
             }
         });
 
         if (getIntent().getIntExtra("currentPosition", 0) == 1) {
             inputColor = getResources().getColor(R.color.apple_green);
-        } else inputColor = getResources().getColor(R.color.dark_sky_blue);
+            type = "income";
+        } else{
+            inputColor = getResources().getColor(R.color.dark_sky_blue);
+            type = "expense";
+        }
         nameEditText.setTextColor(inputColor);
         priceEditText.setTextColor(inputColor);
         setAddButtonStatus();
@@ -71,5 +81,23 @@ public class AddItemActivity extends AppCompatActivity implements TextWatcher {
             addButton.setClickable(false);
             addButton.getCompoundDrawables()[0].setTint(getResources().getColor(R.color.white_three));
         }
+    }
+
+    private void putItemToInternet() {
+        Disposable disposable = ((LoftApp)getApplication()).internetAPI
+                .postItems(priceEditText.getText().toString(), nameEditText.getText().toString(), type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    finish();
+                }, throwable -> {
+                    Toast.makeText(getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG);
+                });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.dispose();
     }
 }

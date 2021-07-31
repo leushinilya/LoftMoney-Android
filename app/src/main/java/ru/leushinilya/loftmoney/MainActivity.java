@@ -15,8 +15,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import ru.leushinilya.loftmoney.cells.Item;
-
 public class MainActivity extends AppCompatActivity {
 
     private final int REQUEST_CODE = 1;
@@ -61,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        for (Fragment fragment: getSupportFragmentManager().getFragments()){
-            if(fragment instanceof BudgetFragment){
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BudgetFragment) {
                 ((BudgetFragment) fragment).compositeDisposable.dispose();
             }
         }
@@ -92,13 +90,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data != null) {
-            String name = data.getStringExtra("name");
-            String price = data.getStringExtra("price");
-            int currentPosition = tabs.getSelectedTabPosition();
-            BudgetFragment fragment = ((BudgetFragment)getSupportFragmentManager().getFragments().get(currentPosition));
-            fragment.itemList.add(new Item(name, price, currentPosition));
-            fragment.itemsAdapter.setData(fragment.itemList);
-        }
+        int currentPosition = tabs.getSelectedTabPosition();
+        BudgetFragment fragment = ((BudgetFragment) getSupportFragmentManager().getFragments().get(currentPosition));
+        fragment.updateListFromInternet(currentPosition);
     }
 }

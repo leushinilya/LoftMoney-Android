@@ -15,6 +15,6 @@ public interface InternetAPI {
 
     @POST("./items/add")
     @FormUrlEncoded
-    Completable postItems(@Field("price") int price, @Field("name") String name, @Field("type") String type);
+    Completable postItems(@Field("price") String price, @Field("name") String name, @Field("type") String type);
 
 }
