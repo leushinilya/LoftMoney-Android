@@ -1,20 +1,27 @@
 package ru.leushinilya.loftmoney;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int REQUEST_CODE = 1;
+
     TabLayout tabs;
     ViewPager2 pages;
+    FloatingActionButton addFAB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabs = findViewById(R.id.tabs);
         pages = findViewById(R.id.pages);
+        addFAB = findViewById(R.id.add_fab);
 
 //        connect pages and fragments
         pages.setAdapter(new MainPagerAdapter(this));
@@ -37,6 +45,25 @@ public class MainActivity extends AppCompatActivity {
         });
         tabLayoutMediator.attach();
 
+        addFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddItemActivity.class);
+                int currentPosition = tabs.getSelectedTabPosition();
+                intent.putExtra("currentPosition", currentPosition);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+            if (fragment instanceof BudgetFragment) {
+                ((BudgetFragment) fragment).compositeDisposable.dispose();
+            }
+        }
     }
 
     private class MainPagerAdapter extends FragmentStateAdapter {
@@ -58,5 +85,13 @@ public class MainActivity extends AppCompatActivity {
         public int getItemCount() {
             return 3;
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int currentPosition = tabs.getSelectedTabPosition();
+        BudgetFragment fragment = ((BudgetFragment) getSupportFragmentManager().getFragments().get(currentPosition));
+        fragment.updateListFromInternet(currentPosition);
     }
 }

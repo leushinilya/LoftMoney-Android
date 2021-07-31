@@ -1,10 +1,11 @@
 package ru.leushinilya.loftmoney.cells;
 
-import java.io.Serializable;
+import ru.leushinilya.loftmoney.remote.RemoteItem;
 
-public class Item implements Serializable {
+public class Item {
 
     private final String name, price;
+//    0 - expense, 1 -income
     int type;
 
     public Item(String name, String price, int type) {
@@ -24,5 +25,13 @@ public class Item implements Serializable {
 
     public int getType() {
         return type;
+    }
+
+    public static Item getInstance(RemoteItem remoteItem) {
+        String remoteItemName = remoteItem.getName();
+        String remoteItemPrice = "" + remoteItem.getPrice();
+        int remoteItemType;
+        if(remoteItem.getType().equals("expense")) remoteItemType = 0; else remoteItemType = 1;
+        return new Item(remoteItemName, remoteItemPrice, remoteItemType);
     }
 }
