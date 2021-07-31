@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Loftmoney">
 
-        <activity android:name="ru.leushinilya.loftmoney.AddItemActivity" />
+        <activity android:name="ru.leushinilya.loftmoney.AddItemActivity" android:theme="@style/Theme.AddItemActivity"/>
 
         <activity android:name="ru.leushinilya.loftmoney.MainActivity">
             <intent-filter>

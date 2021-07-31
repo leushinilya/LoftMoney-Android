@@ -12,5 +12,6 @@
         <item>Доходы</item>
         <item>Баланс</item>
     </array>
+    <string name="tool_bar_title">Учёт бюджета</string>
 
 </resources>
