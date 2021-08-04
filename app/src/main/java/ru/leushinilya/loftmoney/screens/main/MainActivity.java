@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney;
+package ru.leushinilya.loftmoney.screens.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,11 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
+
+import ru.leushinilya.loftmoney.screens.addItem.AddItemActivity;
+import ru.leushinilya.loftmoney.screens.main.balance.BalanceFragment;
+import ru.leushinilya.loftmoney.screens.main.budget.BudgetFragment;
+import ru.leushinilya.loftmoney.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -87,11 +92,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        int currentPosition = tabs.getSelectedTabPosition();
-        BudgetFragment fragment = ((BudgetFragment) getSupportFragmentManager().getFragments().get(currentPosition));
-        fragment.updateListFromInternet(currentPosition);
-    }
 }

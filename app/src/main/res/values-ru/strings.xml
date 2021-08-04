@@ -12,6 +12,12 @@
         <item>Доходы</item>
         <item>Баланс</item>
     </array>
+
     <string name="tool_bar_title">Учёт бюджета</string>
+    <string name="action_login">Войти</string>
+    <string name="tool_bar_title_selection">"Выделено: "</string>
+    <string name="delete_dialog_title">Удалить выбранные элементы?</string>
+    <string name="delete_dialog_yes">Да</string>
+    <string name="delete_dialog_no">Нет</string>
 
 </resources>

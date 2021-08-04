@@ -1,7 +1,6 @@
-package ru.leushinilya.loftmoney;
+package ru.leushinilya.loftmoney.screens.addItem;
 
-import android.content.Intent;
-import android.graphics.PorterDuff;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import ru.leushinilya.loftmoney.LoftApp;
+import ru.leushinilya.loftmoney.R;
 
 public class AddItemActivity extends AppCompatActivity implements TextWatcher {
 
@@ -41,7 +40,7 @@ public class AddItemActivity extends AppCompatActivity implements TextWatcher {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                putItemToInternet();
+                putItemToInternet(getSharedPreferences(getString(R.string.app_name), 0));
             }
         });
 
@@ -83,9 +82,10 @@ public class AddItemActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    private void putItemToInternet() {
-        Disposable disposable = ((LoftApp)getApplication()).internetAPI
-                .postItems(priceEditText.getText().toString(), nameEditText.getText().toString(), type)
+    private void putItemToInternet(SharedPreferences sharedPreferences) {
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
+        Disposable disposable = ((LoftApp)getApplication()).itemsAPI
+                .postItems(priceEditText.getText().toString(), nameEditText.getText().toString(), type, authToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> {
@@ -93,6 +93,7 @@ public class AddItemActivity extends AppCompatActivity implements TextWatcher {
                 }, throwable -> {
                     Toast.makeText(getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG);
                 });
+        compositeDisposable.add(disposable);
     }
 
     @Override
