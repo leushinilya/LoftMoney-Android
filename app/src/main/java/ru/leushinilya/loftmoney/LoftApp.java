@@ -7,11 +7,13 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ru.leushinilya.loftmoney.remote.InternetAPI;
+import ru.leushinilya.loftmoney.remote.AuthAPI;
+import ru.leushinilya.loftmoney.remote.ItemsAPI;
 
 public class LoftApp extends Application {
 
-    InternetAPI internetAPI;
+    public ItemsAPI itemsAPI;
+    public AuthAPI authAPI;
 
     @Override
     public void onCreate() {
@@ -34,6 +36,7 @@ public class LoftApp extends Application {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
 
-        internetAPI = retrofit.create(InternetAPI.class);
+        itemsAPI = retrofit.create(ItemsAPI.class);
+        authAPI = retrofit.create(AuthAPI.class);
     }
 }

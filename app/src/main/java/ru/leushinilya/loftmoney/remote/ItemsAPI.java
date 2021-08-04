@@ -8,10 +8,10 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-public interface InternetAPI {
+public interface ItemsAPI {
 
     @GET("./items")
-    Single<InternetResponse> getItems(@Query("type") String type);
+    Single<ItemsResponse> getItems(@Query("type") String type);
 
     @POST("./items/add")
     @FormUrlEncoded
