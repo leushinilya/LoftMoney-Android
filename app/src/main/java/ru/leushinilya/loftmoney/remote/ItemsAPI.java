@@ -1,5 +1,7 @@
 package ru.leushinilya.loftmoney.remote;
 
+import java.util.ArrayList;
+
 import io.reactivex.Completable;
 import io.reactivex.Single;
 import retrofit2.http.Field;
@@ -11,10 +13,10 @@ import retrofit2.http.Query;
 public interface ItemsAPI {
 
     @GET("./items")
-    Single<ItemsResponse> getItems(@Query("type") String type);
+    Single<ArrayList<RemoteItem>> getItems(@Query("type") String type, @Query("auth-token") String authToken);
 
     @POST("./items/add")
     @FormUrlEncoded
-    Completable postItems(@Field("price") String price, @Field("name") String name, @Field("type") String type);
+    Completable postItems(@Field("price") String price, @Field("name") String name, @Field("type") String type, @Field("auth-token") String authToken);
 
 }

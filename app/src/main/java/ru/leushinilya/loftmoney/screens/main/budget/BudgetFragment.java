@@ -54,7 +54,10 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        budgetViewModel.updateListFromInternet(((LoftApp)getActivity().getApplication()).itemsAPI, currentPosition);
+        budgetViewModel.updateListFromInternet(
+                ((LoftApp) getActivity().getApplication()).itemsAPI,
+                currentPosition,
+                getActivity().getSharedPreferences(getString(R.string.app_name), 0));
     }
 
     private void configureRecyclerView() {
@@ -71,7 +74,7 @@ public class BudgetFragment extends Fragment {
 
     }
 
-    private void configureViewModel(){
+    private void configureViewModel() {
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
         budgetViewModel.liveDataItems.observe(getViewLifecycleOwner(), new Observer<ArrayList<Item>>() {
             @Override
@@ -82,12 +85,15 @@ public class BudgetFragment extends Fragment {
         });
     }
 
-    private void configureRefreshLayout(){
+    private void configureRefreshLayout() {
         swipeRefreshLayout = getView().findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                budgetViewModel.updateListFromInternet(((LoftApp)getActivity().getApplication()).itemsAPI, currentPosition);
+                budgetViewModel.updateListFromInternet(
+                        ((LoftApp) getActivity().getApplication()).itemsAPI,
+                        currentPosition,
+                        getActivity().getSharedPreferences(getString(R.string.app_name), 0));
                 swipeRefreshLayout.setRefreshing(false);
             }
         });

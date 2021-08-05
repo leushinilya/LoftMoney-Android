@@ -14,7 +14,7 @@ public class AuthResponse {
     private String id;
 
     @SerializedName("auth_token")
-    private String auth_token;
+    private String authToken;
 
     public String getStatus() {
         return status;
@@ -24,7 +24,7 @@ public class AuthResponse {
         return id;
     }
 
-    public String getAuth_token() {
-        return auth_token;
+    public String getAuthToken() {
+        return authToken;
     }
 }

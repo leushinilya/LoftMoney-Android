@@ -8,6 +8,9 @@
     <string name="tool_bar_title">Budget accounting</string>
     <string name="action_login">Login</string>
 
+    <string name="client_id" translatable="false">448838896966-gponn45ors24s8q7fpns82clr0cdju6n.apps.googleusercontent.com</string>
+    <string name="client_secret" translatable="false">FADEuji4vAoayrolIkv5fnYG</string>
+
 
     <array name="main_pager_titles">
         <item>expenses</item>
