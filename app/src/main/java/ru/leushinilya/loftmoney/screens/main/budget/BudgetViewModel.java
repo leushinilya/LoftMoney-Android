@@ -1,6 +1,7 @@
 package ru.leushinilya.loftmoney.screens.main.budget;
 
 import android.content.SharedPreferences;
+import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -25,6 +26,7 @@ public class BudgetViewModel extends ViewModel {
     MutableLiveData<ArrayList<Item>> liveDataItems = new MutableLiveData<>();
     MutableLiveData<String> messageString = new MutableLiveData<>();
     MutableLiveData<Integer> messageInt = new MutableLiveData<>();
+    MutableLiveData<Boolean> isEditMode = new MutableLiveData<>(false);
 
     @Override
     protected void onCleared() {
@@ -56,4 +58,19 @@ public class BudgetViewModel extends ViewModel {
 
         compositeDisposable.add(disposable);
     }
+
+    public void removeItem(Item item, ItemsAPI itemsAPI, SharedPreferences sharedPreferences){
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
+        Disposable disposable = itemsAPI
+                .removeItem(item.getId(), authToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+//                    finish();
+                }, throwable -> {
+                    messageString.postValue(throwable.getLocalizedMessage());
+                });
+        compositeDisposable.add(disposable);
+    }
+
 }

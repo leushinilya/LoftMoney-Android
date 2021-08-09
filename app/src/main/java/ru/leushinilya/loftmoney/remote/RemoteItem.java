@@ -24,7 +24,7 @@ public class RemoteItem {
     @SerializedName("type")
     private String type;
 
-    @SerializedName("date")
+    @SerializedName("created_at")
     private String date;
 
     public String getId() {
@@ -48,7 +48,7 @@ public class RemoteItem {
     }
 
     public Date getDate(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
         try {
             return simpleDateFormat.parse(date);
         } catch (ParseException e) {
