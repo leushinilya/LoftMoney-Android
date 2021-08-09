@@ -89,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
             loginViewModel.makeLogin(((LoftApp) getApplication()).authAPI, account.getId());
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+
             finish();
 
         } catch (ApiException e) {

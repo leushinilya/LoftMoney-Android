@@ -12,12 +12,16 @@
 
 <!--    main-->
     <color name="lightish_blue">#3574fa</color>
-    <color name="blue">#3530ff</color>
     <color name="dark_sky_blue">#4a90e2</color>
 
 <!--    AddItemActivity addButton-->
     <color name="apple_green">#7ed321</color>
     <color name="white_three">#eaeaea</color>
+
+<!--    selection-->
+    <color name="selection_tab_color">#333f59</color>
+    <color name="selection_item_color">#f2f2f2</color>
+    <color name="selection_text_color">#b38baaef</color>
 
 <!--    AddItemActivity editText-->
     <color name="hint_color">#dbdbdb</color>
@@ -25,6 +29,8 @@
 
     <color name="medium_grey">#666664</color>
     <color name="marigold">#ffc107</color>
+
+    <color name="tabs_text">#b38baaef</color>
 
 
 </resources>
