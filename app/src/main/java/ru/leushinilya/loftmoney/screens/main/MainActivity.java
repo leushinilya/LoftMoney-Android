@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 //        connect pages and fragments
         pages.setAdapter(new MainPagerAdapter(this));
+        pages.setOffscreenPageLimit(3);
 
 //        connect tabs and pages
         TabLayoutMediator tabLayoutMediator = new TabLayoutMediator(tabs, pages, new TabLayoutMediator.TabConfigurationStrategy() {
@@ -79,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment createFragment(int position) {
-            if (position == 2) return new BalanceFragment();
+            if (position == 2){
+                return new BalanceFragment();
+            }
             else {
                 BudgetFragment budgetFragment = BudgetFragment.newInstance(position);
                 return budgetFragment;

@@ -73,6 +73,7 @@ public class BudgetFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
         budgetViewModel.updateListFromInternet(
                 ((LoftApp) getActivity().getApplication()).itemsAPI,
                 currentPosition,

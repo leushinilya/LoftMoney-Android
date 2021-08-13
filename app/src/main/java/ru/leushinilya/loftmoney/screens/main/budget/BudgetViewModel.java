@@ -1,7 +1,6 @@
 package ru.leushinilya.loftmoney.screens.main.budget;
 
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +14,6 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import ru.leushinilya.loftmoney.LoftApp;
-import ru.leushinilya.loftmoney.R;
 import ru.leushinilya.loftmoney.cells.Item;
 import ru.leushinilya.loftmoney.remote.ItemsAPI;
 import ru.leushinilya.loftmoney.remote.RemoteItem;
@@ -23,10 +21,12 @@ import ru.leushinilya.loftmoney.remote.RemoteItem;
 public class BudgetViewModel extends ViewModel {
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    MutableLiveData<ArrayList<Item>> liveDataItems = new MutableLiveData<>();
-    MutableLiveData<String> messageString = new MutableLiveData<>();
-    MutableLiveData<Integer> messageInt = new MutableLiveData<>();
-    MutableLiveData<Boolean> isEditMode = new MutableLiveData<>(false);
+    public MutableLiveData<ArrayList<Item>> liveDataItems = new MutableLiveData<>();
+    public MutableLiveData<String> messageString = new MutableLiveData<>();
+    public MutableLiveData<Integer> messageInt = new MutableLiveData<>();
+    public MutableLiveData<Boolean> isEditMode = new MutableLiveData<>(false);
+    public MutableLiveData<Float> incomesSum = new MutableLiveData<>(0f);
+    public MutableLiveData<Float> expensesSum = new MutableLiveData<>(0f);
 
     @Override
     protected void onCleared() {
@@ -43,14 +43,19 @@ public class BudgetViewModel extends ViewModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(remoteItems -> {
 //                        sorting remoteItems list by date
-                        Comparator<RemoteItem> comparator = (o1, o2) -> o1.getDate().compareTo(o2.getDate());
-                        Collections.sort(remoteItems, comparator);
+                    Comparator<RemoteItem> comparator = (o1, o2) -> o1.getDate().compareTo(o2.getDate());
+                    Collections.sort(remoteItems, comparator);
 
-                        ArrayList<Item> itemList = new ArrayList<>();
-                        for (RemoteItem remoteItem : remoteItems) {
-                            itemList.add(Item.getInstance(remoteItem));
-                        }
-                        liveDataItems.postValue(itemList);
+                    ArrayList<Item> itemList = new ArrayList<>();
+                    float sum = 0;
+                    for (RemoteItem remoteItem : remoteItems) {
+                        itemList.add(Item.getInstance(remoteItem));
+                        sum += remoteItem.getPrice();
+
+                    }
+                    liveDataItems.postValue(itemList);
+                    if (currentPosition == 0) expensesSum.postValue(sum);
+                    else if (currentPosition == 1) incomesSum.postValue(sum);
 
                 }, throwable -> {
                     messageString.postValue(throwable.getLocalizedMessage());
@@ -59,7 +64,7 @@ public class BudgetViewModel extends ViewModel {
         compositeDisposable.add(disposable);
     }
 
-    public void removeItem(Item item, ItemsAPI itemsAPI, SharedPreferences sharedPreferences){
+    public void removeItem(Item item, ItemsAPI itemsAPI, SharedPreferences sharedPreferences) {
         String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
         Disposable disposable = itemsAPI
                 .removeItem(item.getId(), authToken)

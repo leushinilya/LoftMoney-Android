@@ -28,6 +28,7 @@
     <color name="text_color">#3574fa</color>
 
     <color name="medium_grey">#666664</color>
+    <color name="pale_orange">#ff9e57</color>
     <color name="marigold">#ffc107</color>
 
     <color name="tabs_text">#b38baaef</color>
