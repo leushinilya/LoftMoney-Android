@@ -21,7 +21,7 @@ import ru.leushinilya.loftmoney.remote.RemoteItem;
 public class BudgetViewModel extends ViewModel {
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
-    public MutableLiveData<ArrayList<Item>> liveDataItems = new MutableLiveData<>();
+    public MutableLiveData<ArrayList<Item>> liveDataItems = new MutableLiveData<>(new ArrayList<Item>());
     public MutableLiveData<String> messageString = new MutableLiveData<>();
     public MutableLiveData<Integer> messageInt = new MutableLiveData<>();
     public MutableLiveData<Boolean> isEditMode = new MutableLiveData<>(false);

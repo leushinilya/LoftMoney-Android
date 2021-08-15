@@ -9,6 +9,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
@@ -78,6 +79,7 @@ public class BudgetFragment extends Fragment {
                 ((LoftApp) getActivity().getApplication()).itemsAPI,
                 currentPosition,
                 getActivity().getSharedPreferences(getString(R.string.app_name), 0));
+        configureTabIcons();
     }
 
     @Override
@@ -172,6 +174,9 @@ public class BudgetFragment extends Fragment {
         iconTrash = getActivity().findViewById(R.id.iconTrash);
         toolBarTextView = getActivity().findViewById(R.id.toolBarTextView);
         addFAB = getActivity().findViewById(R.id.add_fab);
+    }
+
+    private void configureTabIcons(){
         iconBack.setOnClickListener(click -> {
             budgetViewModel.isEditMode.postValue(false);
             switchColorsForEditMode(false);
