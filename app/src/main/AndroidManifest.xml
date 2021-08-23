@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Loftmoney">
         <activity
-            android:name=".screens.start.SplashActivity"
+            android:name=".screens.start.SplashActivity" android:noHistory="true"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
