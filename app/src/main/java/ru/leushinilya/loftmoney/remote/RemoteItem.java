@@ -19,7 +19,7 @@ public class RemoteItem {
     private String name;
 
     @SerializedName("price")
-    private double price;
+    private float price;
 
     @SerializedName("type")
     private String type;
@@ -35,7 +35,7 @@ public class RemoteItem {
         return name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
@@ -48,7 +48,7 @@ public class RemoteItem {
     }
 
     public Date getDate(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return simpleDateFormat.parse(date);
         } catch (ParseException e) {

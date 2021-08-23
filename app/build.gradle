@@ -15,9 +15,23 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
+    signingConfigs {
         release {
-            minifyEnabled false
+            storeFile file ("loftmoney.jks")
+            storePassword "123456"
+            keyAlias "loftmoney"
+            keyPassword "123456"
+        }
+    }
+
+    buildTypes {
+        debug{
+            resValue("string", "app_label", "LoftMoney-Debug")
+        }
+        release {
+            signingConfig signingConfigs.release
+            resValue("string", "app_label", "LoftMoney")
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

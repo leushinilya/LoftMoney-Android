@@ -12,6 +12,9 @@
     <string name="delete_dialog_title">Delete selected items?</string>
     <string name="delete_dialog_yes">Yes</string>
     <string name="delete_dialog_no">No</string>
+    <string name="available_finance">"Available finance"</string>
+    <string name="expences">"Expenses"</string>
+    <string name="incomes">"Incomes"</string>
 
 
     <array name="main_pager_titles">
