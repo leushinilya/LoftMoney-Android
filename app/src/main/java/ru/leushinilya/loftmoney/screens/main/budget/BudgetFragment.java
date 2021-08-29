@@ -2,6 +2,7 @@ package ru.leushinilya.loftmoney.screens.main.budget;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -75,6 +75,7 @@ public class BudgetFragment extends Fragment {
     public void onResume() {
         super.onResume();
         getActivity().findViewById(R.id.add_fab).setVisibility(View.VISIBLE);
+        currentPosition = ((ViewPager2) getActivity().findViewById(R.id.pages)).getCurrentItem();
         budgetViewModel.updateListFromInternet(
                 ((LoftApp) getActivity().getApplication()).itemsAPI,
                 currentPosition,
@@ -106,11 +107,11 @@ public class BudgetFragment extends Fragment {
                 if (budgetViewModel.isEditMode.getValue()) {
                     item.setSelected(!item.isSelected());
                     itemsAdapter.updateItem(item);
-                    if(checkSelectedCount()>0){
+                    if (checkSelectedCount() > 0) {
                         toolBarTextView.setText(
                                 getResources().getString(R.string.tool_bar_title_selection)
                                         + checkSelectedCount());
-                    } else{
+                    } else {
                         budgetViewModel.isEditMode.postValue(false);
                         switchColorsForEditMode(false);
                     }
@@ -176,19 +177,19 @@ public class BudgetFragment extends Fragment {
         addFAB = getActivity().findViewById(R.id.add_fab);
     }
 
-    private void configureTabIcons(){
+    private void configureTabIcons() {
         iconBack.setOnClickListener(click -> {
             budgetViewModel.isEditMode.postValue(false);
             switchColorsForEditMode(false);
         });
-        iconTrash.setOnClickListener(click ->{
+        iconTrash.setOnClickListener(click -> {
             new AlertDialog.Builder(getActivity())
                     .setTitle(R.string.delete_dialog_title)
                     .setPositiveButton(R.string.delete_dialog_yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            for (Item item: budgetViewModel.liveDataItems.getValue()){
-                                if(item.isSelected()){
+                            for (Item item : budgetViewModel.liveDataItems.getValue()) {
+                                if (item.isSelected()) {
                                     budgetViewModel.removeItem(item,
                                             ((LoftApp) getActivity().getApplication()).itemsAPI,
                                             getActivity().getSharedPreferences(getString(R.string.app_name), 0));
@@ -202,7 +203,8 @@ public class BudgetFragment extends Fragment {
                                     getActivity().getSharedPreferences(getString(R.string.app_name), 0));
                         }
                     })
-                    .setNegativeButton(R.string.delete_dialog_no, (dialog, which) -> {})
+                    .setNegativeButton(R.string.delete_dialog_no, (dialog, which) -> {
+                    })
                     .show();
         });
     }
