@@ -8,7 +8,13 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -22,32 +28,46 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
     var inputColor = 0
     var type = "expense"
     var compositeDisposable = CompositeDisposable()
+
+    @Preview
+    @Composable
+    fun AddButton() {
+        Button(
+            onClick = { Toast.makeText(this, "Button works", Toast.LENGTH_LONG).show() }
+        ) {
+
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_item)
-        addButton = findViewById(R.id.add_button)
-        nameEditText = findViewById(R.id.name_edit_text)
-        priceEditText = findViewById(R.id.price_edit_text)
-        nameEditText!!.addTextChangedListener(this)
-        priceEditText!!.addTextChangedListener(this)
-        addButton!!.setOnClickListener(View.OnClickListener {
-            putItemToInternet(
-                getSharedPreferences(
-                    getString(R.string.app_name),
-                    0
-                )
-            )
-        })
-        if (intent.getIntExtra("currentPosition", 0) == 1) {
-            inputColor = resources.getColor(R.color.apple_green)
-            type = "income"
-        } else {
-            inputColor = resources.getColor(R.color.dark_sky_blue)
-            type = "expense"
+        setContent {
+            AddButton()
         }
-        nameEditText!!.setTextColor(inputColor)
-        priceEditText!!.setTextColor(inputColor)
-        setAddButtonStatus()
+//        setContentView(R.layout.activity_add_item)
+//        addButton = findViewById(R.id.add_button)
+//        nameEditText = findViewById(R.id.name_edit_text)
+//        priceEditText = findViewById(R.id.price_edit_text)
+//        nameEditText!!.addTextChangedListener(this)
+//        priceEditText!!.addTextChangedListener(this)
+//        addButton!!.setOnClickListener(View.OnClickListener {
+//            putItemToInternet(
+//                getSharedPreferences(
+//                    getString(R.string.app_name),
+//                    0
+//                )
+//            )
+//        })
+//        if (intent.getIntExtra("currentPosition", 0) == 1) {
+//            inputColor = resources.getColor(R.color.apple_green)
+//            type = "income"
+//        } else {
+//            inputColor = resources.getColor(R.color.dark_sky_blue)
+//            type = "expense"
+//        }
+//        nameEditText!!.setTextColor(inputColor)
+//        priceEditText!!.setTextColor(inputColor)
+//        setAddButtonStatus()
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

@@ -32,7 +32,7 @@ android {
         release {
             signingConfig signingConfigs.release
             resValue("string", "app_label", "LoftMoney")
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
