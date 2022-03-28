@@ -1,25 +1,41 @@
-# Compiled class file
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
 *.class
 
-# Log file
-*.log
+# generated files
+bin/**
+gen/**
+out/**
+gen-external-apklibs/**
 
-# BlueJ files
-*.ctxt
+# Local configuration file (sdk path, etc)
+local.properties
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# IntellijJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea/**
+classes/**
+target/**
 
-# Package Files #
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+# Mac OS
+.DS_Store
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-/.idea/
-/.idea/
+# Gradle
+gradle-app.setting
+.gradletasknamecache
+.gradle/**
+build/**
+build
+/captures
+
+/buildSrc
+/buildSrc/*
+.externalNativeBuild
