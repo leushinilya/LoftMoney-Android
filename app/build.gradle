@@ -1,14 +1,15 @@
 plugins {
     id 'com.android.application'
+    id 'kotlin-android'
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "ru.leushinilya.loftmoney"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -17,7 +18,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file ("loftmoney.jks")
+            storeFile file("loftmoney.jks")
             storePassword "123456"
             keyAlias "loftmoney"
             keyPassword "123456"
@@ -25,7 +26,7 @@ android {
     }
 
     buildTypes {
-        debug{
+        debug {
             resValue("string", "app_label", "LoftMoney-Debug")
         }
         release {
@@ -38,6 +39,16 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
+    }
+
+    buildFeatures {
+        compose = true
     }
 }
 
@@ -68,4 +79,18 @@ dependencies {
 
 //    google auth
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.4.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.1'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+
 }

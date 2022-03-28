@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.balance;
+package ru.leushinilya.loftmoney.screens.main.diagram;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,14 +17,14 @@ import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
 import ru.leushinilya.loftmoney.screens.main.budget.BudgetViewModel;
 
-public class BalanceFragment extends Fragment {
+public class DiagramFragment extends Fragment {
 
     BudgetViewModel budgetViewModel;
 
     TextView balanceTextView;
     TextView expensesTextView;
     TextView incomesTextView;
-    BalanceView balanceView;
+    DiagramView diagramView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,11 +59,11 @@ public class BalanceFragment extends Fragment {
         budgetViewModel = new ViewModelProvider(this).get(BudgetViewModel.class);
         budgetViewModel.expensesSum.observe(getViewLifecycleOwner(), expenses -> {
             expensesTextView.setText("" + expenses);
-            balanceView.setExpenses(expenses);
+            diagramView.setExpenses(expenses);
         });
         budgetViewModel.incomesSum.observe(getViewLifecycleOwner(), incomes -> {
             incomesTextView.setText("" + incomes);
-            balanceView.setIncomes(incomes);
+            diagramView.setIncomes(incomes);
         });
     }
 
@@ -71,7 +71,7 @@ public class BalanceFragment extends Fragment {
         balanceTextView = getView().findViewById(R.id.balanceTextView);
         expensesTextView = getView().findViewById(R.id.expensesTextView);
         incomesTextView = getView().findViewById(R.id.incomesTextView);
-        balanceView = getView().findViewById(R.id.balanceView);
+        diagramView = getView().findViewById(R.id.balanceView);
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
