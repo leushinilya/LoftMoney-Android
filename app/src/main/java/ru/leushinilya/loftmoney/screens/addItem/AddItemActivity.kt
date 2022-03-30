@@ -4,16 +4,29 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.TextField
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -29,20 +42,62 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
     var type = "expense"
     var compositeDisposable = CompositeDisposable()
 
-    @Preview
     @Composable
     fun AddButton() {
         Button(
-            onClick = { Toast.makeText(this, "Button works", Toast.LENGTH_LONG).show() }
+            onClick = { },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = colorResource(id = R.color.white)
+            )
         ) {
-
+            val color = when (type) {
+                "expense" -> colorResource(id = R.color.dark_sky_blue)
+                else -> colorResource(id = R.color.apple_green)
+            }
+            Image(
+                painter = painterResource(id = R.drawable.check_icon),
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(color)
+            )
+            Text(
+                stringResource(id = R.string.button_add_text),
+                color = color,
+                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.spacing_8))
+            )
         }
+    }
+
+    @Composable
+    fun NameTextField() {
+        var text by remember { mutableStateOf("") }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(stringResource(id = R.string.edittext_title_hint)) }
+        )
+    }
+
+    @Preview
+    @Composable
+    fun AddItemLayout() {
+        Box(modifier = Modifier
+            .background(color = colorResource(id = R.color.white))
+            .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Column {
+                NameTextField()
+                AddButton()
+            }
+        }
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AddButton()
+            AddItemLayout()
         }
 //        setContentView(R.layout.activity_add_item)
 //        addButton = findViewById(R.id.add_button)
