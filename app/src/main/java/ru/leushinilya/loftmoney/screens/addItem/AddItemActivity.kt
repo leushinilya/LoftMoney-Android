@@ -11,14 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +21,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -43,12 +38,43 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
     var compositeDisposable = CompositeDisposable()
 
     @Composable
+    fun NameTextField() {
+        var text by remember { mutableStateOf("") }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(stringResource(id = R.string.edittext_title_hint)) },
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorResource(id = R.color.white),
+                textColor = colorResource(id = R.color.dark_sky_blue)
+            )
+        )
+    }
+
+    @Composable
+    fun PriceTextField() {
+        var text by remember { mutableStateOf("") }
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text(stringResource(id = R.string.edittext_price_hint)) },
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16)),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = colorResource(id = R.color.white),
+                textColor = colorResource(id = R.color.dark_sky_blue)
+            ),
+            textStyle = TextStyle(color = colorResource(id = R.color.dark_sky_blue))
+        )
+    }
+
+    @Composable
     fun AddButton() {
         Button(
             onClick = { },
             colors = ButtonDefaults.buttonColors(
                 backgroundColor = colorResource(id = R.color.white)
-            )
+            ),
+            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16))
         ) {
             val color = when (type) {
                 "expense" -> colorResource(id = R.color.dark_sky_blue)
@@ -67,16 +93,6 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
         }
     }
 
-    @Composable
-    fun NameTextField() {
-        var text by remember { mutableStateOf("") }
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text(stringResource(id = R.string.edittext_title_hint)) }
-        )
-    }
-
     @Preview
     @Composable
     fun AddItemLayout() {
@@ -85,8 +101,11 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
             .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 NameTextField()
+                PriceTextField()
                 AddButton()
             }
         }
