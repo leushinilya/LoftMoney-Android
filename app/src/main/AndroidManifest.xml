@@ -26,8 +26,8 @@
             android:exported="true" />
         <activity
             android:name=".screens.addItem.AddItemActivity"
-            android:theme="@style/Theme.AddItemActivity"
-            android:exported="true"/>
+            android:exported="true"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".screens.main.MainActivity"
             android:exported="true">
             <intent-filter>

@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -22,80 +24,35 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import ru.leushinilya.loftmoney.EXPENSE
+import ru.leushinilya.loftmoney.INCOME
 import ru.leushinilya.loftmoney.LoftApp
 import ru.leushinilya.loftmoney.R
 
-class AddItemActivity : AppCompatActivity(), TextWatcher {
+class AddItemActivity : AppCompatActivity() {
     var addButton: Button? = null
     var nameEditText: EditText? = null
     var priceEditText: EditText? = null
-    var inputColor = 0
-    var type = "expense"
     var compositeDisposable = CompositeDisposable()
-
-    @Composable
-    fun NameTextField() {
-        var text by remember { mutableStateOf("") }
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text(stringResource(id = R.string.edittext_title_hint)) },
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = colorResource(id = R.color.white),
-                textColor = colorResource(id = R.color.dark_sky_blue)
-            )
-        )
-    }
-
-    @Composable
-    fun PriceTextField() {
-        var text by remember { mutableStateOf("") }
-        TextField(
-            value = text,
-            onValueChange = { text = it },
-            label = { Text(stringResource(id = R.string.edittext_price_hint)) },
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16)),
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = colorResource(id = R.color.white),
-                textColor = colorResource(id = R.color.dark_sky_blue)
-            ),
-            textStyle = TextStyle(color = colorResource(id = R.color.dark_sky_blue))
-        )
-    }
-
-    @Composable
-    fun AddButton() {
-        Button(
-            onClick = { },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = colorResource(id = R.color.white)
-            ),
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16))
-        ) {
-            val color = when (type) {
-                "expense" -> colorResource(id = R.color.dark_sky_blue)
-                else -> colorResource(id = R.color.apple_green)
-            }
-            Image(
-                painter = painterResource(id = R.drawable.check_icon),
-                contentDescription = "",
-                colorFilter = ColorFilter.tint(color)
-            )
-            Text(
-                stringResource(id = R.string.button_add_text),
-                color = color,
-                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.spacing_8))
-            )
-        }
-    }
+    var transactionType: Int? = null
 
     @Preview
     @Composable
     fun AddItemLayout() {
+
+        var name by remember { mutableStateOf("") }
+        var price by remember { mutableStateOf("") }
+        val color = when (transactionType) {
+            INCOME -> colorResource(id = R.color.apple_green)
+            EXPENSE -> colorResource(id = R.color.dark_sky_blue)
+            else -> colorResource(id = R.color.white_three)
+        }
+
         Box(modifier = Modifier
             .background(color = colorResource(id = R.color.white))
             .fillMaxSize(),
@@ -104,9 +61,53 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                NameTextField()
-                PriceTextField()
-                AddButton()
+
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text(stringResource(id = R.string.edittext_title_hint)) },
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = colorResource(id = R.color.white),
+                        textColor = color
+                    )
+                )
+
+                TextField(
+                    value = price,
+                    onValueChange = { price = it },
+                    label = { Text(stringResource(id = R.string.edittext_price_hint)) },
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16)),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = colorResource(id = R.color.white),
+                        textColor = color
+                    ),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+
+                Button(
+                    onClick = { },
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = colorResource(id = R.color.white)
+                    ),
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16))
+                ) {
+                    val buttonContentColor = if (name.isNotBlank() && price.isNotBlank()) {
+                        color
+                    } else {
+                        colorResource(id = R.color.white_three)
+                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.check_icon),
+                        contentDescription = "",
+                        colorFilter = ColorFilter.tint(buttonContentColor)
+                    )
+                    Text(
+                        stringResource(id = R.string.button_add_text),
+                        color = buttonContentColor,
+                        modifier = Modifier.padding(start = dimensionResource(id = R.dimen.spacing_8))
+                    )
+                }
+
             }
         }
 
@@ -115,6 +116,7 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        transactionType = intent.getIntExtra("transactionType", -1)
         setContent {
             AddItemLayout()
         }
@@ -144,25 +146,30 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
 //        setAddButtonStatus()
     }
 
-    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-    override fun afterTextChanged(s: Editable) {
-        setAddButtonStatus()
-    }
+//    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+//    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+//    override fun afterTextChanged(s: Editable) {
+//        setAddButtonStatus()
+//    }
 
-    private fun setAddButtonStatus() {
-        if (nameEditText!!.text.toString() != "" && priceEditText!!.text.toString() != "") {
-            addButton!!.setTextColor(inputColor)
-            addButton!!.isClickable = true
-            addButton!!.compoundDrawables[0].setTint(inputColor)
-        } else {
-            addButton!!.setTextColor(resources.getColor(R.color.white_three))
-            addButton!!.isClickable = false
-            addButton!!.compoundDrawables[0].setTint(resources.getColor(R.color.white_three))
-        }
-    }
+//    private fun setAddButtonStatus() {
+//        if (nameEditText!!.text.toString() != "" && priceEditText!!.text.toString() != "") {
+//            addButton!!.setTextColor(inputColor)
+//            addButton!!.isClickable = true
+//            addButton!!.compoundDrawables[0].setTint(inputColor)
+//        } else {
+//            addButton!!.setTextColor(resources.getColor(R.color.white_three))
+//            addButton!!.isClickable = false
+//            addButton!!.compoundDrawables[0].setTint(resources.getColor(R.color.white_three))
+//        }
+//    }
 
     private fun putItemToInternet(sharedPreferences: SharedPreferences) {
+        val type = when (transactionType) {
+            INCOME -> "income"
+            EXPENSE -> "expense"
+            else -> return
+        }
         val authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "")
         val disposable = (application as LoftApp).itemsAPI
             .postItems(
@@ -184,4 +191,5 @@ class AddItemActivity : AppCompatActivity(), TextWatcher {
         super.onDestroy()
         compositeDisposable.dispose()
     }
+
 }

@@ -1,5 +1,8 @@
 package ru.leushinilya.loftmoney.screens.main;
 
+import static ru.leushinilya.loftmoney.ConstantsKt.EXPENSE;
+import static ru.leushinilya.loftmoney.ConstantsKt.INCOME;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -54,8 +57,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), AddItemActivity.class);
-                int currentPosition = tabs.getSelectedTabPosition();
-                intent.putExtra("currentPosition", currentPosition);
+                int tabPosition = tabs.getSelectedTabPosition();
+                if (tabPosition == 0) {
+                    intent.putExtra("transactionType", EXPENSE);
+                } else if (tabPosition == 1) {
+                    intent.putExtra("transactionType", INCOME);
+                }
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
