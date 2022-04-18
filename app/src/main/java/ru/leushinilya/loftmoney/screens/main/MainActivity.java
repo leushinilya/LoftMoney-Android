@@ -68,16 +68,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
-            if (fragment instanceof BudgetFragment) {
-                ((BudgetFragment) fragment).compositeDisposable.dispose();
-            }
-        }
-    }
-
     private class MainPagerAdapter extends FragmentStateAdapter {
 
         public MainPagerAdapter(FragmentActivity fragmentActivity) {
@@ -90,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 return new DiagramFragment();
             }
             else {
-                BudgetFragment budgetFragment = BudgetFragment.newInstance(position);
+                BudgetFragment budgetFragment = BudgetFragment.Companion.newInstance(position);
                 return budgetFragment;
             }
         }
