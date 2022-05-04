@@ -65,6 +65,7 @@ dependencies {
 //    interface
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.google.accompanist:accompanist-swiperefresh:0.24.7-alpha'
 
 //    internet
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -78,7 +79,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
 
 //    google auth
-    implementation 'com.google.android.gms:play-services-auth:20.1.0'
+    implementation 'com.google.android.gms:play-services-auth:20.2.0'
 
     // Integration with activities
     implementation 'androidx.activity:activity-compose:1.4.0'

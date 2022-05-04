@@ -9,18 +9,26 @@ import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import androidx.viewpager2.widget.ViewPager2
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
-import io.reactivex.disposables.CompositeDisposable
 import ru.leushinilya.loftmoney.LoftApp
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.cells.Item
@@ -41,11 +49,21 @@ class BudgetFragment : Fragment() {
     private var toolBarTextView: TextView? = null
     private var addFAB: FloatingActionButton? = null
 
+//    override fun onCreateView(
+//        inflater: LayoutInflater, container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//        return inflater.inflate(R.layout.fragment_budget, container, false)
+//    }
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_budget, container, false)
+    ): View = ComposeView(requireContext()).apply {
+        setContent {
+            TransactionList()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,11 +78,11 @@ class BudgetFragment : Fragment() {
         super.onResume()
         activity?.findViewById<View>(R.id.add_fab)?.visibility = View.VISIBLE
         currentPosition = (activity?.findViewById<View>(R.id.pages) as ViewPager2).currentItem
-        budgetViewModel!!.updateListFromInternet(
-            (activity?.application as LoftApp).itemsAPI,
-            currentPosition,
-            activity?.getSharedPreferences(getString(R.string.app_name), 0)
-        )
+//        budgetViewModel!!.updateListFromInternet(
+//            (activity?.application as LoftApp).itemsAPI,
+//            currentPosition,
+//            activity?.getSharedPreferences(getString(R.string.app_name), 0)
+//        )
         configureTabIcons()
     }
 
@@ -116,21 +134,19 @@ class BudgetFragment : Fragment() {
 
     private fun checkSelectedCount(): Int {
         var selectedCount = 0
-        for (item in budgetViewModel!!.liveDataItems.value!!) {
-            if (item.isSelected) {
-                selectedCount++
-            }
-        }
+//        for (item in budgetViewModel!!.items.value!!) {
+//            if (item.isSelected) {
+//                selectedCount++
+//            }
+//        }
         return selectedCount
     }
 
     private fun configureViewModel() {
         budgetViewModel = ViewModelProvider(this).get(BudgetViewModel::class.java)
-        budgetViewModel!!.liveDataItems.observe(viewLifecycleOwner) { items ->
-            itemsAdapter.setData(
-                items
-            )
-        }
+//        budgetViewModel!!.items.observe(viewLifecycleOwner) {
+//            itemsAdapter.setData(items)
+//        }
     }
 
     private fun configureRefreshLayout() {
@@ -139,7 +155,7 @@ class BudgetFragment : Fragment() {
             budgetViewModel?.updateListFromInternet(
                 (activity?.application as LoftApp).itemsAPI,
                 currentPosition,
-                activity?.getSharedPreferences(getString(R.string.app_name), 0)
+                activity?.getSharedPreferences(getString(R.string.app_name), 0)!!
             )
             swipeRefreshLayout?.setRefreshing(false)
         })
@@ -155,69 +171,96 @@ class BudgetFragment : Fragment() {
     }
 
     private fun configureTabIcons() {
-        iconBack!!.setOnClickListener { click: View? ->
-            budgetViewModel!!.isEditMode.postValue(false)
-            switchColorsForEditMode(false)
-        }
-        iconTrash!!.setOnClickListener { click: View? ->
-            AlertDialog.Builder(requireActivity())
-                .setTitle(R.string.delete_dialog_title)
-                .setPositiveButton(R.string.delete_dialog_yes) { dialog, which ->
-                    for (item in budgetViewModel!!.liveDataItems.value!!) {
-                        if (item.isSelected) {
-                            budgetViewModel!!.removeItem(
-                                item,
-                                (activity?.application as LoftApp).itemsAPI,
-                                activity?.getSharedPreferences(getString(R.string.app_name), 0)
-                            )
-                        }
-                    }
-                    budgetViewModel!!.isEditMode.postValue(false)
-                    switchColorsForEditMode(false)
-                    budgetViewModel!!.updateListFromInternet(
-                        (activity?.application as LoftApp).itemsAPI,
-                        currentPosition,
-                        activity?.getSharedPreferences(getString(R.string.app_name), 0)
-                    )
-                }
-                .setNegativeButton(R.string.delete_dialog_no) { dialog: DialogInterface?, which: Int -> }
-                .show()
-        }
+//        iconBack!!.setOnClickListener { click: View? ->
+//            budgetViewModel!!.isEditMode.postValue(false)
+//            switchColorsForEditMode(false)
+//        }
+//        iconTrash!!.setOnClickListener { click: View? ->
+//            AlertDialog.Builder(requireActivity())
+//                .setTitle(R.string.delete_dialog_title)
+//                .setPositiveButton(R.string.delete_dialog_yes) { dialog, which ->
+//                    for (item in budgetViewModel!!.items.value!!) {
+//                        if (item.isSelected) {
+//                            budgetViewModel!!.removeItem(
+//                                item,
+//                                (activity?.application as LoftApp).itemsAPI,
+//                                activity?.getSharedPreferences(getString(R.string.app_name), 0)
+//                            )
+//                        }
+//                    }
+//                    budgetViewModel!!.isEditMode.postValue(false)
+//                    switchColorsForEditMode(false)
+//                    budgetViewModel!!.updateListFromInternet(
+//                        (activity?.application as LoftApp).itemsAPI,
+//                        currentPosition,
+//                        activity?.getSharedPreferences(getString(R.string.app_name), 0)
+//                    )
+//                }
+//                .setNegativeButton(R.string.delete_dialog_no) { dialog: DialogInterface?, which: Int -> }
+//                .show()
+//        }
     }
 
     private fun switchColorsForEditMode(isEditMode: Boolean) {
-        val window = activity?.window
-        window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        if (isEditMode) {
-            toolbar!!.setBackgroundColor(resources.getColor(R.color.selection_tab_color))
-            tabLayout!!.setBackgroundColor(resources.getColor(R.color.selection_tab_color))
-            window?.statusBarColor = resources.getColor(R.color.selection_tab_color)
-            tabLayout!!.setTabTextColors(
-                resources.getColor(R.color.white),
-                resources.getColor(R.color.selection_text_color)
-            )
-            iconBack!!.visibility = View.VISIBLE
-            iconTrash!!.visibility = View.VISIBLE
-            addFAB!!.visibility = View.GONE
-        } else {
-            toolbar!!.setBackgroundColor(resources.getColor(R.color.lightish_blue))
-            tabLayout!!.setBackgroundColor(resources.getColor(R.color.lightish_blue))
-            window?.statusBarColor = resources.getColor(R.color.lightish_blue)
-            tabLayout!!.setTabTextColors(
-                resources.getColor(R.color.tabs_text),
-                resources.getColor(R.color.white)
-            )
-            toolBarTextView!!.text = resources.getString(R.string.tool_bar_title)
-            iconBack!!.visibility = View.GONE
-            iconTrash!!.visibility = View.GONE
-            addFAB!!.visibility = View.VISIBLE
-            for (item in budgetViewModel!!.liveDataItems.value!!) {
-                if (item.isSelected) item.isSelected = false
-                itemsAdapter.updateItem(item)
-            }
+//        val window = activity?.window
+//        window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+//        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+//        if (isEditMode) {
+//            toolbar!!.setBackgroundColor(resources.getColor(R.color.selection_tab_color))
+//            tabLayout!!.setBackgroundColor(resources.getColor(R.color.selection_tab_color))
+//            window?.statusBarColor = resources.getColor(R.color.selection_tab_color)
+//            tabLayout!!.setTabTextColors(
+//                resources.getColor(R.color.white),
+//                resources.getColor(R.color.selection_text_color)
+//            )
+//            iconBack!!.visibility = View.VISIBLE
+//            iconTrash!!.visibility = View.VISIBLE
+//            addFAB!!.visibility = View.GONE
+//        } else {
+//            toolbar!!.setBackgroundColor(resources.getColor(R.color.lightish_blue))
+//            tabLayout!!.setBackgroundColor(resources.getColor(R.color.lightish_blue))
+//            window?.statusBarColor = resources.getColor(R.color.lightish_blue)
+//            tabLayout!!.setTabTextColors(
+//                resources.getColor(R.color.tabs_text),
+//                resources.getColor(R.color.white)
+//            )
+//            toolBarTextView!!.text = resources.getString(R.string.tool_bar_title)
+//            iconBack!!.visibility = View.GONE
+//            iconTrash!!.visibility = View.GONE
+//            addFAB!!.visibility = View.VISIBLE
+//            for (item in budgetViewModel!!.items.value!!) {
+//                if (item.isSelected) item.isSelected = false
+//                itemsAdapter.updateItem(item)
+//            }
+//        }
+    }
+
+    @Composable
+    fun ItemView(item: Item) {
+        Row {
+            Text(text = item.name)
+            Text(text = item.price)
         }
     }
+
+    @Composable
+    fun TransactionList(viewModel: BudgetViewModel = viewModel()) {
+        val itemList = viewModel.items
+        viewModel.updateListFromInternet(
+            (activity?.application as LoftApp).itemsAPI,
+            currentPosition,
+            activity?.getSharedPreferences(getString(R.string.app_name), 0)!!
+        )
+        SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = true), onRefresh = { /*TODO*/ }) {
+            LazyColumn {
+                items(itemList) { transaction ->
+                    ItemView(item = transaction)
+                }
+            }
+        }
+
+    }
+
 
     companion object {
         fun newInstance(position: Int): BudgetFragment {
