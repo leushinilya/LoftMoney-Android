@@ -10,10 +10,18 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -78,11 +86,11 @@ class BudgetFragment : Fragment() {
         super.onResume()
         activity?.findViewById<View>(R.id.add_fab)?.visibility = View.VISIBLE
         currentPosition = (activity?.findViewById<View>(R.id.pages) as ViewPager2).currentItem
-//        budgetViewModel!!.updateListFromInternet(
-//            (activity?.application as LoftApp).itemsAPI,
-//            currentPosition,
-//            activity?.getSharedPreferences(getString(R.string.app_name), 0)
-//        )
+        budgetViewModel!!.updateListFromInternet(
+            (activity?.application as LoftApp).itemsAPI,
+            currentPosition,
+            activity?.getSharedPreferences(getString(R.string.app_name), 0)!!
+        )
         configureTabIcons()
     }
 
@@ -245,15 +253,19 @@ class BudgetFragment : Fragment() {
 
     @Composable
     fun TransactionList(viewModel: BudgetViewModel = viewModel()) {
-        val itemList = viewModel.items
-        viewModel.updateListFromInternet(
-            (activity?.application as LoftApp).itemsAPI,
-            currentPosition,
-            activity?.getSharedPreferences(getString(R.string.app_name), 0)!!
-        )
-        SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = true), onRefresh = { /*TODO*/ }) {
-            LazyColumn {
-                items(itemList) { transaction ->
+        val isRefreshing = viewModel.isRefreshing
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing),
+            onRefresh = {
+                viewModel.updateListFromInternet(
+                    (activity?.application as LoftApp).itemsAPI,
+                    currentPosition,
+                    activity?.getSharedPreferences(getString(R.string.app_name), 0)!!
+                )
+            }
+        ) {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(viewModel.items) { transaction ->
                     ItemView(item = transaction)
                 }
             }
