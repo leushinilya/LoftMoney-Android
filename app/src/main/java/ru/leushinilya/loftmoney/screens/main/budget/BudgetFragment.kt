@@ -1,28 +1,30 @@
 package ru.leushinilya.loftmoney.screens.main.budget
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -245,9 +247,37 @@ class BudgetFragment : Fragment() {
 
     @Composable
     fun ItemView(item: Item) {
-        Row {
-            Text(text = item.name)
-            Text(text = item.price)
+        val textStyle = TextStyle(
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium
+        )
+        val priceColor = when (item.type) {
+            0 -> colorResource(id = R.color.lightish_blue)
+            1 -> colorResource(id = R.color.apple_green)
+            else -> colorResource(id = R.color.medium_grey)
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(dimensionResource(id = R.dimen.spacing_24))
+                .selectable(
+                    selected = false,
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(),
+                    onClick = {}
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = item.name,
+                color = colorResource(id = R.color.medium_grey),
+                style = textStyle
+            )
+            Text(
+                text = item.price,
+                style = textStyle,
+                color = priceColor
+            )
         }
     }
 
