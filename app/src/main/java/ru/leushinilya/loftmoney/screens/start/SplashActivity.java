@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
-import ru.leushinilya.loftmoney.screens.main.MainActivity;
+import ru.leushinilya.loftmoney.screens.main.MainActivityOld;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
         String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
 
         if(authToken!=null && !authToken.equals("")){
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MainActivityOld.class);
             startActivity(intent);
         }
         else{

@@ -22,7 +22,7 @@ import ru.leushinilya.loftmoney.screens.main.diagram.DiagramFragment;
 import ru.leushinilya.loftmoney.screens.main.budget.BudgetFragment;
 import ru.leushinilya.loftmoney.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivityOld extends AppCompatActivity {
 
     private final int REQUEST_CODE = 1;
 

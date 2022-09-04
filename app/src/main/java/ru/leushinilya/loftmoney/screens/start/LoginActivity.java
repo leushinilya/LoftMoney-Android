@@ -19,7 +19,7 @@ import com.google.android.gms.tasks.Task;
 
 import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
-import ru.leushinilya.loftmoney.screens.main.MainActivity;
+import ru.leushinilya.loftmoney.screens.main.MainActivityOld;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             loginViewModel.makeLogin(((LoftApp) getApplication()).authAPI, account.getId());
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, MainActivityOld.class);
             startActivity(intent);
 
             finish();
