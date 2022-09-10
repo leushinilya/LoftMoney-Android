@@ -29,7 +29,7 @@ import ru.leushinilya.loftmoney.cells.Item
 
 @Preview
 @Composable
-fun TransactionList(viewModel: ListViewModel = ListViewModel()) {
+fun ListScreen(viewModel: ListViewModel = ListViewModel()) {
     val isRefreshing = viewModel.isRefreshing
     Image(
         painter = painterResource(id = R.drawable.background),
