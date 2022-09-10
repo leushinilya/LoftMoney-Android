@@ -12,6 +12,7 @@ class SplashViewModel(application: Application) : AndroidViewModel(application),
     val state = MutableLiveData<SplashState>(SplashState.WaitingState)
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+        if (event != Lifecycle.Event.ON_RESUME) return
         val preferences = getApplication<LoftApp>().getSharedPreferences(LoftApp.AUTH_KEY, 0)
         val accessToken = preferences.getString(LoftApp.AUTH_KEY, "")
         viewModelScope.launch {
