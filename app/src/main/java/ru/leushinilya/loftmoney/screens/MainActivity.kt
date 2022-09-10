@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable(Screens.SPLASH.name) { SplashScreen(navController) }
-                composable(Screens.LOGIN.name) { LoginScreen() }
+                composable(Screens.LOGIN.name) { LoginScreen(navController) }
                 composable(Screens.MAIN.name) { MainScreen() }
             }
         }

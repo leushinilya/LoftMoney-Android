@@ -25,11 +25,11 @@ import androidx.compose.ui.unit.sp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 
-@Preview
 @Composable
-fun ListScreen(viewModel: ListViewModel = ListViewModel()) {
+fun ListScreen(transactionType: TransactionType, viewModel: ListViewModel = ListViewModel()) {
     val isRefreshing = viewModel.isRefreshing
     Image(
         painter = painterResource(id = R.drawable.background),
@@ -95,4 +95,10 @@ fun ItemView(item: Item = Item("111", "Name", "500", 1)) {
             color = priceColor
         )
     }
+}
+
+@Preview
+@Composable
+fun ListScreenPreview() {
+    ListScreen(transactionType = TransactionType.EXPENSE)
 }

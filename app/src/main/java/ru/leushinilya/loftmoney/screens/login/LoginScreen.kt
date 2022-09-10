@@ -14,14 +14,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.screens.Screens
 
-@Preview
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = LoginViewModel()) {
+fun LoginScreen(navController: NavController, viewModel: LoginViewModel = LoginViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -36,7 +36,8 @@ fun LoginScreen(viewModel: LoginViewModel = LoginViewModel()) {
         )
         Button(
             onClick = {
-                viewModel.onLoginClicked()
+//                viewModel.onLoginClicked()
+                navController.navigate(Screens.MAIN.name)
             },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors(colorResource(id = R.color.white)),
