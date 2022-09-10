@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.budget
+package ru.leushinilya.loftmoney.screens.old.main.budget
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -11,8 +11,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.colorResource
@@ -159,7 +156,7 @@ class BudgetFragment : Fragment() {
                 resources.getColor(R.color.tabs_text),
                 resources.getColor(R.color.white)
             )
-            toolBarTextView!!.text = resources.getString(R.string.tool_bar_title)
+            toolBarTextView!!.text = resources.getString(R.string.budget_accounting)
             iconBack!!.visibility = View.GONE
             iconTrash!!.visibility = View.GONE
             addFAB!!.visibility = View.VISIBLE

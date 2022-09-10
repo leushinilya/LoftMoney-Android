@@ -9,6 +9,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import ru.leushinilya.loftmoney.screens.login.LoginScreen
+import ru.leushinilya.loftmoney.screens.main.MainScreen
 import ru.leushinilya.loftmoney.screens.splash.SplashScreen
 
 class MainActivity : ComponentActivity() {

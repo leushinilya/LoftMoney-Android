@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.start;
+package ru.leushinilya.loftmoney.screens.old.start;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;

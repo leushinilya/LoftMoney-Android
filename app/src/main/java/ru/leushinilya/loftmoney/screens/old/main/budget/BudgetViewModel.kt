@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.budget
+package ru.leushinilya.loftmoney.screens.old.main.budget
 
 import android.content.SharedPreferences
 import androidx.compose.runtime.getValue

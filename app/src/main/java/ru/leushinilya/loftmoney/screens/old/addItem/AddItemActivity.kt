@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.addItem
+package ru.leushinilya.loftmoney.screens.old.addItem
 
 import android.os.Bundle
 import android.widget.Toast

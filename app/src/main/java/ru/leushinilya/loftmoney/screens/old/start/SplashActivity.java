@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.start;
+package ru.leushinilya.loftmoney.screens.old.start;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
-import ru.leushinilya.loftmoney.screens.main.MainActivityOld;
+import ru.leushinilya.loftmoney.screens.old.main.MainActivityOld;
 
 public class SplashActivity extends AppCompatActivity {
 

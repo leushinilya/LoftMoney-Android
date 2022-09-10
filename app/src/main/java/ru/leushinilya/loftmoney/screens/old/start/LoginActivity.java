@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.start;
+package ru.leushinilya.loftmoney.screens.old.start;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import com.google.android.gms.tasks.Task;
 
 import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
-import ru.leushinilya.loftmoney.screens.main.MainActivityOld;
+import ru.leushinilya.loftmoney.screens.old.main.MainActivityOld;
 
 public class LoginActivity extends AppCompatActivity {
 

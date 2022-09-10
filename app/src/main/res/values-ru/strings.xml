@@ -13,7 +13,7 @@
         <item>Баланс</item>
     </array>
 
-    <string name="tool_bar_title">Учёт бюджета</string>
+    <string name="budget_accounting">Учёт бюджета</string>
     <string name="action_login">Войти</string>
     <string name="tool_bar_title_selection">"Выделено: "</string>
     <string name="delete_dialog_title">Удалить выбранные элементы?</string>
@@ -22,5 +22,6 @@
     <string name="available_finance">Доступные финансы</string>
     <string name="expences">Расходы</string>
     <string name="incomes">Доходы</string>
+    <string name="balance">Баланс</string>
 
 </resources>

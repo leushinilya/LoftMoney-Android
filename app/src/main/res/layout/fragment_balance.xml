@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".screens.main.diagram.DiagramFragment"
+    tools:context=".screens.old.main.diagram.DiagramFragment"
     android:orientation="vertical">
 
     <TextView
@@ -92,7 +92,7 @@
             />
     </LinearLayout>
     
-    <ru.leushinilya.loftmoney.screens.main.diagram.DiagramView
+    <ru.leushinilya.loftmoney.screens.old.main.diagram.DiagramView
         android:id="@+id/balanceView"
         android:layout_width="180dp"
         android:layout_height="180dp"

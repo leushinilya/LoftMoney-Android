@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.main.MainActivityOld">
+    tools:context=".screens.old.main.MainActivityOld">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -36,7 +36,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:paddingLeft="16dp"
-                    android:text="@string/tool_bar_title"
+                    android:text="@string/budget_accounting"
                     android:textColor="@color/white"
                     android:textSize="@dimen/font_20" />
                 <ImageView

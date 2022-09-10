@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main;
+package ru.leushinilya.loftmoney.screens.old.main;
 
 import static ru.leushinilya.loftmoney.ConstantsKt.EXPENSE;
 import static ru.leushinilya.loftmoney.ConstantsKt.INCOME;
@@ -17,9 +17,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
-import ru.leushinilya.loftmoney.screens.addItem.AddItemActivity;
-import ru.leushinilya.loftmoney.screens.main.diagram.DiagramFragment;
-import ru.leushinilya.loftmoney.screens.main.budget.BudgetFragment;
+import ru.leushinilya.loftmoney.screens.old.addItem.AddItemActivity;
+import ru.leushinilya.loftmoney.screens.old.main.diagram.DiagramFragment;
+import ru.leushinilya.loftmoney.screens.old.main.budget.BudgetFragment;
 import ru.leushinilya.loftmoney.R;
 
 public class MainActivityOld extends AppCompatActivity {

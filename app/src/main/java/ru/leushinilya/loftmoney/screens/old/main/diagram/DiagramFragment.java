@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.diagram;
+package ru.leushinilya.loftmoney.screens.old.main.diagram;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import ru.leushinilya.loftmoney.LoftApp;
 import ru.leushinilya.loftmoney.R;
-import ru.leushinilya.loftmoney.screens.main.budget.BudgetViewModel;
+import ru.leushinilya.loftmoney.screens.old.main.budget.BudgetViewModel;
 
 public class DiagramFragment extends Fragment {
 

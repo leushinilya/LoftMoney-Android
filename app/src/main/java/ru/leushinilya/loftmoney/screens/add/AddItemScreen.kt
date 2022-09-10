@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens
+package ru.leushinilya.loftmoney.screens.add
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,19 +18,23 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 
+@Preview
 @Composable
-fun AddItemScreen(type: TransactionType) {
+fun AddItemScreen(
+    type: TransactionType = TransactionType.EXPENSE,
+    viewModel: AddItemViewModel = AddItemViewModel()
+) {
 
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     val color = when (type) {
         TransactionType.INCOME -> colorResource(id = R.color.apple_green)
         TransactionType.EXPENSE -> colorResource(id = R.color.dark_sky_blue)
-        else -> colorResource(id = R.color.white_three)
     }
 
     Box(

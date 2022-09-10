@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.diagram;
+package ru.leushinilya.loftmoney.screens.old.main.diagram;
 
 import android.content.Context;
 import android.graphics.Canvas;
