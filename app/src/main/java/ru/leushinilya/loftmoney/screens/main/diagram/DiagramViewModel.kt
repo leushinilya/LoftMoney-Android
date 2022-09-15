@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModel
 
 class DiagramViewModel : ViewModel() {
 
-    val incomes by mutableStateOf("0")
-    val expenses by mutableStateOf("0")
-    val available by mutableStateOf("0")
+    val incomes by mutableStateOf(10000F)
+    val expenses by mutableStateOf(10000F)
+    val available by mutableStateOf(0F)
 
 }

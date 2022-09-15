@@ -9,10 +9,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import ru.leushinilya.loftmoney.screens.login.LoginScreen
 import ru.leushinilya.loftmoney.screens.main.MainScreen
 import ru.leushinilya.loftmoney.screens.splash.SplashScreen
 
+@ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

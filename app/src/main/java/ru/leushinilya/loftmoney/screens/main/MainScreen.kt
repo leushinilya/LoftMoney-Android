@@ -5,57 +5,68 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.screens.Screens
 import ru.leushinilya.loftmoney.screens.main.diagram.DiagramScreen
 import ru.leushinilya.loftmoney.screens.main.list.ListScreen
 
+@ExperimentalPagerApi
 @Preview
 @Composable
 fun MainScreen() {
-    val navController = rememberNavController()
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
-    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+    val pagerState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = { TopBar() }
     ) {
         Column {
-            TabRow(selectedTabIndex = selectedTabIndex) {
+            TabRow(
+                selectedTabIndex = pagerState.currentPage,
+                indicator = {
+                    TabRowDefaults.Indicator(
+                        Modifier
+                            .pagerTabIndicatorOffset(pagerState, it)
+                    )
+                }
+            ) {
                 screens.forEach {
                     Tab(
                         text = {
                             Text(stringResource(id = it.titleRes))
                         },
                         onClick = {
-                            navController.navigate(it.name)
-                            selectedTabIndex = screens.indexOf(it)
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(screens.indexOf(it))
+                            }
                         },
-                        selected = selectedTabIndex == screens.indexOf(it),
+                        selected = pagerState.currentPage == screens.indexOf(it),
                         modifier = Modifier.background(colorResource(id = R.color.lightish_blue))
                     )
                 }
             }
-            NavHost(
-                navController = navController,
-                startDestination = screens[selectedTabIndex].name,
+            HorizontalPager(
+                count = screens.size,
+                state = pagerState,
                 modifier = Modifier.padding(it)
             ) {
-                composable(Screens.LIST_EXPENSES.name) { ListScreen(TransactionType.EXPENSE) }
-                composable(Screens.LIST_INCOMES.name) { ListScreen(TransactionType.INCOME) }
-                composable(Screens.DIAGRAM.name) { DiagramScreen() }
+                when (it) {
+                    0 -> ListScreen(TransactionType.EXPENSE)
+                    1 -> ListScreen(TransactionType.INCOME)
+                    2 -> DiagramScreen()
+                }
             }
         }
     }
