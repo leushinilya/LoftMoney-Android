@@ -10,25 +10,34 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
+import ru.leushinilya.loftmoney.LoftApp
+import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.screens.add.AddItemScreen
 import ru.leushinilya.loftmoney.screens.login.LoginScreen
 import ru.leushinilya.loftmoney.screens.main.MainScreen
-import ru.leushinilya.loftmoney.screens.splash.SplashScreen
 
 @ExperimentalPagerApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val preferences = getSharedPreferences(LoftApp.AUTH_KEY, 0)
+        val accessToken = preferences.getString(LoftApp.AUTH_KEY, "")
         setContent {
             val navController: NavHostController = rememberNavController()
+            val startDestination = when (accessToken.isNullOrEmpty()) {
+                true -> Screens.LOGIN.name
+                false -> Screens.MAIN.name
+            }
             NavHost(
                 navController = navController,
-                startDestination = Screens.SPLASH.name,
+                startDestination = startDestination,
                 modifier = Modifier.fillMaxSize()
             ) {
-                composable(Screens.SPLASH.name) { SplashScreen(navController) }
                 composable(Screens.LOGIN.name) { LoginScreen(navController) }
-                composable(Screens.MAIN.name) { MainScreen() }
+                composable(Screens.MAIN.name) { MainScreen(navController) }
+                composable(Screens.ADD_ITEM.name) { AddItemScreen() }
             }
         }
+        setTheme(R.style.Theme_Loftmoney)
     }
 }

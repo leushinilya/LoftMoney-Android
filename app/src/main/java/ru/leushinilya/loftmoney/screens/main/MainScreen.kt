@@ -1,5 +1,6 @@
 package ru.leushinilya.loftmoney.screens.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -8,9 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -23,14 +27,14 @@ import ru.leushinilya.loftmoney.screens.main.diagram.DiagramScreen
 import ru.leushinilya.loftmoney.screens.main.list.ListScreen
 
 @ExperimentalPagerApi
-@Preview
 @Composable
-fun MainScreen() {
+fun MainScreen(navController: NavController) {
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
-        topBar = { TopBar() }
+        topBar = { TopBar() },
+        floatingActionButton = { AddItemFab { navController.navigate(Screens.ADD_ITEM.name) } }
     ) {
         Column {
             TabRow(
@@ -72,7 +76,6 @@ fun MainScreen() {
     }
 }
 
-@Preview
 @Composable
 fun TopBar() {
     TopAppBar(
@@ -86,3 +89,18 @@ fun TopBar() {
         backgroundColor = colorResource(id = R.color.lightish_blue)
     )
 }
+
+@Composable
+fun AddItemFab(onClick: () -> Unit) {
+    FloatingActionButton(
+        onClick = onClick,
+        backgroundColor = colorResource(id = R.color.marigold)
+    ) {
+        Image(painter = painterResource(id = R.drawable.add_icon), contentDescription = "add")
+    }
+}
+
+@ExperimentalPagerApi
+@Preview
+@Composable
+fun MainScreenPreview() = MainScreen(navController = rememberNavController())
