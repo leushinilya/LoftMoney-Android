@@ -37,8 +37,8 @@ fun MainScreen() {
                 selectedTabIndex = pagerState.currentPage,
                 indicator = {
                     TabRowDefaults.Indicator(
-                        Modifier
-                            .pagerTabIndicatorOffset(pagerState, it)
+                        color = colorResource(id = R.color.marigold),
+                        modifier = Modifier.pagerTabIndicatorOffset(pagerState, it)
                     )
                 }
             ) {
