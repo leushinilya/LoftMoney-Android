@@ -1,6 +1,7 @@
 package ru.leushinilya.loftmoney.screens.add
 
 import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -28,15 +30,28 @@ import ru.leushinilya.loftmoney.TransactionType
 @Preview
 @Composable
 fun AddItemScreen(
-    type: TransactionType = TransactionType.EXPENSE,
+    type: String? = null,
+    onBackPressed: () -> Unit = {},
     viewModel: AddItemViewModel = AddItemViewModel(LocalContext.current.applicationContext as Application)
 ) {
 
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     val color = when (type) {
-        TransactionType.INCOME -> colorResource(id = R.color.apple_green)
-        TransactionType.EXPENSE -> colorResource(id = R.color.dark_sky_blue)
+        TransactionType.INCOME.name -> colorResource(id = R.color.apple_green)
+        TransactionType.EXPENSE.name -> colorResource(id = R.color.dark_sky_blue)
+        else -> return
+    }
+
+    val viewState = viewModel.state.observeAsState()
+    when (val state = viewState.value) {
+        is AddItemViewState.Error -> Toast.makeText(
+            LocalContext.current,
+            state.message,
+            Toast.LENGTH_LONG
+        ).show()
+        is AddItemViewState.Success -> onBackPressed()
+        else -> {}
     }
 
     Box(
@@ -81,7 +96,7 @@ fun AddItemScreen(
 
             Button(
                 onClick = {
-//                    putItemToInternet(price, name)
+                    viewModel.onAddClicked(price.toFloat(), name, type)
                 },
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = colorResource(id = R.color.white)

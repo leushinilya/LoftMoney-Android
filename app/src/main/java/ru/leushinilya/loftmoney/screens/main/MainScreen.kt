@@ -16,6 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -24,6 +25,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.screens.Screens
 
 @ExperimentalPagerApi
@@ -38,7 +40,16 @@ fun MainScreen(
     LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
     Scaffold(
         topBar = { TopBar() },
-        floatingActionButton = { AddItemFab { navController.navigate(Screens.ADD_ITEM.name) } }
+        floatingActionButton = {
+            when (pagerState.currentPage) {
+                0 -> {
+                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.EXPENSE}") }
+                }
+                1 -> {
+                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.INCOME}") }
+                }
+            }
+        }
     ) {
         Column {
             TabRow(

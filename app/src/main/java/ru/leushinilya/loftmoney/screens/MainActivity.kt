@@ -6,9 +6,11 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import ru.leushinilya.loftmoney.LoftApp
 import ru.leushinilya.loftmoney.R
@@ -35,7 +37,12 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable(Screens.LOGIN.name) { LoginScreen(navController) }
                 composable(Screens.MAIN.name) { MainScreen(navController) }
-                composable(Screens.ADD_ITEM.name) { AddItemScreen() }
+                composable(
+                    route = "${Screens.ADD_ITEM.name}/{type}",
+                    arguments = listOf(navArgument("type") { type = NavType.StringType })
+                ) {
+                    AddItemScreen(it.arguments?.getString("type"), onBackPressed = { navController.navigateUp() })
+                }
             }
         }
         setTheme(R.style.Theme_Loftmoney)
