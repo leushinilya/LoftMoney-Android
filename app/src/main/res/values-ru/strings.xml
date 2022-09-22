@@ -23,5 +23,6 @@
     <string name="expences">Расходы</string>
     <string name="incomes">Доходы</string>
     <string name="balance">Баланс</string>
+    <string name="fill_all_data">Заполните все данные</string>
 
 </resources>

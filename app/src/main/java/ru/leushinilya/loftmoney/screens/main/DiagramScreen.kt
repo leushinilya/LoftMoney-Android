@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.diagram
+package ru.leushinilya.loftmoney.screens.main
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import ru.leushinilya.loftmoney.R
 
 @Preview
 @Composable
-fun DiagramScreen(viewModel: DiagramViewModel = DiagramViewModel()) {
+fun DiagramScreen(expensesSum: Float = 0F, incomesSum: Float = 0F) {
 
     ConstraintLayout(
         modifier = Modifier
@@ -42,7 +42,7 @@ fun DiagramScreen(viewModel: DiagramViewModel = DiagramViewModel()) {
                 color = colorResource(id = R.color.medium_grey)
             )
             Text(
-                text = viewModel.available.toString(),
+                text = (incomesSum - expensesSum).toString(),
                 fontSize = 48.sp,
                 color = colorResource(id = R.color.pale_orange),
                 fontWeight = FontWeight(500)
@@ -66,7 +66,7 @@ fun DiagramScreen(viewModel: DiagramViewModel = DiagramViewModel()) {
                 color = colorResource(id = R.color.medium_grey)
             )
             Text(
-                text = viewModel.expenses.toString(),
+                text = expensesSum.toString(),
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.dark_sky_blue),
                 fontWeight = FontWeight(500)
@@ -90,7 +90,7 @@ fun DiagramScreen(viewModel: DiagramViewModel = DiagramViewModel()) {
                 color = colorResource(id = R.color.medium_grey)
             )
             Text(
-                text = viewModel.incomes.toString(),
+                text = incomesSum.toString(),
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.apple_green),
                 fontWeight = FontWeight(500)
@@ -104,8 +104,8 @@ fun DiagramScreen(viewModel: DiagramViewModel = DiagramViewModel()) {
                     bottom.linkTo(parent.bottom)
                 }
                 .padding(16.dp),
-            expenses = viewModel.expenses,
-            incomes = viewModel.incomes
+            expenses = expensesSum,
+            incomes = incomesSum
         )
     }
 

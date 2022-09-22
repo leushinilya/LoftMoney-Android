@@ -139,7 +139,7 @@ class AddItemActivity : ComponentActivity() {
         val authToken = getSharedPreferences(getString(R.string.app_name), 0)
             .getString(LoftApp.AUTH_KEY, "")
         compositeDisposable.add(
-            (application as LoftApp).itemsAPI.postItems(price, name, type, authToken)
+            (application as LoftApp).itemsAPI.postItems(price.toFloat(), name, type, authToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

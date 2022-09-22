@@ -1,5 +1,6 @@
 package ru.leushinilya.loftmoney.screens.add
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -27,7 +29,7 @@ import ru.leushinilya.loftmoney.TransactionType
 @Composable
 fun AddItemScreen(
     type: TransactionType = TransactionType.EXPENSE,
-    viewModel: AddItemViewModel = AddItemViewModel()
+    viewModel: AddItemViewModel = AddItemViewModel(LocalContext.current.applicationContext as Application)
 ) {
 
     var name by remember { mutableStateOf("") }

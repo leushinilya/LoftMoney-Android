@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main.list
+package ru.leushinilya.loftmoney.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,17 +20,14 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import ru.leushinilya.loftmoney.R
-import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 
 @Composable
-fun ListScreen(transactionType: TransactionType, viewModel: ListViewModel = ListViewModel()) {
-    val isRefreshing = viewModel.isRefreshing
+fun ListScreen(items: List<Item>, isRefreshing: Boolean) {
     Image(
         painter = painterResource(id = R.drawable.background),
         contentDescription = null,
@@ -43,7 +40,7 @@ fun ListScreen(transactionType: TransactionType, viewModel: ListViewModel = List
         }
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(viewModel.items) { transaction ->
+            items(items) { transaction ->
                 ItemView(item = transaction)
                 Divider(
                     color = colorResource(id = R.color.medium_grey),
@@ -95,10 +92,4 @@ fun ItemView(item: Item = Item("111", "Name", "500", 1)) {
             color = priceColor
         )
     }
-}
-
-@Preview
-@Composable
-fun ListScreenPreview() {
-    ListScreen(transactionType = TransactionType.EXPENSE)
 }

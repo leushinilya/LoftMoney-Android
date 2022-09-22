@@ -20,7 +20,7 @@ import ru.leushinilya.loftmoney.screens.main.MainScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferences = getSharedPreferences(LoftApp.AUTH_KEY, 0)
+        val preferences = getSharedPreferences(getString(R.string.app_name), 0)
         val accessToken = preferences.getString(LoftApp.AUTH_KEY, "")
         setContent {
             val navController: NavHostController = rememberNavController()

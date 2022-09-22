@@ -16,6 +16,7 @@
     <string name="expences">"Expenses"</string>
     <string name="incomes">"Incomes"</string>
     <string name="balance">Balance</string>
+    <string name="fill_all_data">Fill all data</string>
 
     <array name="main_pager_titles">
         <item>expenses</item>

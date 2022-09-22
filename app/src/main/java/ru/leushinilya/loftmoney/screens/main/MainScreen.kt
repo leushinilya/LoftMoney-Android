@@ -1,5 +1,6 @@
 package ru.leushinilya.loftmoney.screens.main
 
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -21,17 +24,18 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
-import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.screens.Screens
-import ru.leushinilya.loftmoney.screens.main.diagram.DiagramScreen
-import ru.leushinilya.loftmoney.screens.main.list.ListScreen
 
 @ExperimentalPagerApi
 @Composable
-fun MainScreen(navController: NavController) {
+fun MainScreen(
+    navController: NavController,
+    viewModel: MainViewModel = MainViewModel(LocalContext.current.applicationContext as Application)
+) {
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
+    LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
     Scaffold(
         topBar = { TopBar() },
         floatingActionButton = { AddItemFab { navController.navigate(Screens.ADD_ITEM.name) } }
@@ -65,11 +69,14 @@ fun MainScreen(navController: NavController) {
                 count = screens.size,
                 state = pagerState,
                 modifier = Modifier.padding(it)
-            ) {
-                when (it) {
-                    0 -> ListScreen(TransactionType.EXPENSE)
-                    1 -> ListScreen(TransactionType.INCOME)
-                    2 -> DiagramScreen()
+            ) { page ->
+                when (page) {
+                    0 -> ListScreen(viewModel.expenses, viewModel.isRefreshing)
+                    1 -> ListScreen(viewModel.incomes, viewModel.isRefreshing)
+                    2 -> DiagramScreen(
+                        viewModel.expenses.sumOf { it.price.toDouble() }.toFloat(),
+                        viewModel.incomes.sumOf { it.price.toDouble() }.toFloat()
+                    )
                 }
             }
         }

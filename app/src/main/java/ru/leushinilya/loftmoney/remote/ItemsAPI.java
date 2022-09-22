@@ -17,7 +17,7 @@ public interface ItemsAPI {
 
     @POST("./items/add")
     @FormUrlEncoded
-    Completable postItems(@Field("price") String price, @Field("name") String name, @Field("type") String type, @Field("auth-token") String authToken);
+    Completable postItems(@Field("price") float price, @Field("name") String name, @Field("type") String type, @Field("auth-token") String authToken);
 
     @POST("./items/remove")
     @FormUrlEncoded
