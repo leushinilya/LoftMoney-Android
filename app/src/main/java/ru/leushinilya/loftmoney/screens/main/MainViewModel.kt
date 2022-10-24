@@ -22,6 +22,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     var expenses by mutableStateOf(listOf<Item>())
     var incomes by mutableStateOf(listOf<Item>())
     var isRefreshing by mutableStateOf(false)
+    var selectedCount by mutableStateOf(0)
 
     private val app = getApplication<LoftApp>()
     private val compositeDisposable = CompositeDisposable()
