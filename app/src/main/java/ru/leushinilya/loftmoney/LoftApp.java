@@ -1,6 +1,7 @@
 package ru.leushinilya.loftmoney;
 
 import android.app.Application;
+import android.content.SharedPreferences;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -15,11 +16,14 @@ public class LoftApp extends Application {
     public ItemsAPI itemsAPI;
     public AuthAPI authAPI;
     public static String AUTH_KEY = "authKey";
+    public SharedPreferences preferences;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         configureRetrofit();
+        preferences = getSharedPreferences(getString(R.string.app_name), 0);
     }
 
     private void configureRetrofit() {

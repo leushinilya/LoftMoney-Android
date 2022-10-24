@@ -23,4 +23,7 @@ public interface ItemsAPI {
     @FormUrlEncoded
     Completable removeItem(@Field("id") String id, @Field("auth-token") String authToken);
 
+    @GET("./auth")
+    Single<AuthResponse> makeLogin(@Query("social_user_id") String userId);
+
 }
