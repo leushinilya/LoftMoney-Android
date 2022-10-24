@@ -43,4 +43,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
         )
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.clear()
+    }
+
 }

@@ -33,10 +33,10 @@ fun LoginScreen(
     viewModel: LoginViewModel = LoginViewModel(LocalContext.current.applicationContext as Application)
 ) {
     val authorized = viewModel.authorized.observeAsState()
-    if (authorized.value == true) {
+    if (authorized.value == true && navController.currentDestination?.route != Screens.MAIN.name) {
         navController.navigate(Screens.MAIN.name)
+        return
     }
-
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
         onResult = {
