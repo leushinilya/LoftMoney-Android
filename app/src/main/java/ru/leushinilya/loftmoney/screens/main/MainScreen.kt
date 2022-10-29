@@ -1,15 +1,14 @@
 package ru.leushinilya.loftmoney.screens.main
 
-import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -18,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -34,7 +34,7 @@ import ru.leushinilya.loftmoney.screens.Screens
 @Composable
 fun MainScreen(
     navController: NavController,
-    viewModel: MainViewModel = MainViewModel(LocalContext.current.applicationContext as Application)
+    viewModel: MainViewModel = viewModel()
 ) {
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
     val pagerState = rememberPagerState()
@@ -46,12 +46,12 @@ fun MainScreen(
     } else {
         colorResource(id = R.color.lightish_blue)
     }
-    systemUiController.setSystemBarsColor(backgroundColor)
+    systemUiController.setStatusBarColor(backgroundColor)
     LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
     Scaffold(
         topBar = {
             if (viewModel.selectedCount > 0) {
-                EditingTopBar(viewModel.selectedCount)
+                EditingTopBar(viewModel)
             } else {
                 TopBar()
             }
@@ -125,19 +125,22 @@ fun TopBar() {
     )
 }
 
-@Preview
 @Composable
-fun EditingTopBar(selectedCount: Int = 0) {
+fun EditingTopBar(viewModel: MainViewModel) {
     TopAppBar(
         backgroundColor = colorResource(id = R.color.selection_tab_color)
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_back),
             contentDescription = "back_icon",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    viewModel.onExitEditMode()
+                }
         )
         Text(
-            text = "${stringResource(id = R.string.tool_bar_title_selection)} $selectedCount",
+            text = "${stringResource(id = R.string.tool_bar_title_selection)} ${viewModel.selectedCount}",
             color = colorResource(id = R.color.white),
             fontWeight = FontWeight(700),
             fontSize = 20.sp,
@@ -145,7 +148,7 @@ fun EditingTopBar(selectedCount: Int = 0) {
         )
         Image(
             painter = painterResource(id = R.drawable.ic_trash),
-            contentDescription = "back_icon",
+            contentDescription = "back_trash",
             modifier = Modifier.padding(16.dp)
         )
     }

@@ -74,11 +74,7 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
 
     fun switchSelection() {
         isSelected = !isSelected
-        if (isSelected) {
-            viewModel.selectedCount++
-        } else {
-            viewModel.selectedCount--
-        }
+        viewModel.onItemSelectionChanged(isSelected)
     }
     Row(
         modifier = Modifier

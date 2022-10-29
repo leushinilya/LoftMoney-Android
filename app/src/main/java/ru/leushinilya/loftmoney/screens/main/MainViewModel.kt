@@ -65,4 +65,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
         )
     }
 
+    fun onItemSelectionChanged(isSelected: Boolean) {
+        if (isSelected) {
+            selectedCount++
+        } else {
+            selectedCount--
+        }
+    }
+
+    fun onExitEditMode() {
+        selectedCount = 0
+    }
+
 }
