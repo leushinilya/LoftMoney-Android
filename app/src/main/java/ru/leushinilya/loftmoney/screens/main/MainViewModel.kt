@@ -13,30 +13,32 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import ru.leushinilya.loftmoney.LoftApp
-import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
+
+//TODO:
+// refresher при смене ориентации экрана зависает
+// при удалении не обновляется список
+// после удаления выделяются не те элементы, что были нажаты
+//
 
 class MainViewModel(application: Application) : AndroidViewModel(application),
     LifecycleEventObserver {
 
-    var expenses by mutableStateOf(listOf<Item>())
-    var incomes by mutableStateOf(listOf<Item>())
-    var isRefreshing by mutableStateOf(false)
+    var expenses = mutableStateListOf<Item>()
+    var incomes = mutableStateListOf<Item>()
     var selectedItems = mutableStateListOf<Item>()
+    var isRefreshing by mutableStateOf(false)
 
     private val app = getApplication<LoftApp>()
     private val compositeDisposable = CompositeDisposable()
+    private val authToken = app.preferences.getString(LoftApp.AUTH_KEY, "")
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
-                getItems(TransactionType.EXPENSE) {
-                    expenses = it
-                }
-                getItems(TransactionType.INCOME) {
-                    incomes = it
-                }
+                updateExpenses()
+                updateIncomes()
             }
             Lifecycle.Event.ON_DESTROY -> {
                 compositeDisposable.dispose()
@@ -46,8 +48,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     }
 
     private fun getItems(transactionType: TransactionType, onSuccess: (List<Item>) -> Unit) {
-        val authToken = app.getSharedPreferences(app.getString(R.string.app_name), 0)
-            .getString(LoftApp.AUTH_KEY, "")
         compositeDisposable.add(
             app.itemsAPI.getItems(transactionType.value, authToken)
                 .subscribeOn(Schedulers.io())
@@ -59,28 +59,60 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
                                 Item.getInstance(remoteItem)
                             }
                         )
-                        isRefreshing = false
                     },
                     {}
                 )
         )
     }
 
-    fun onItemSelectionChanged(item: Item, isSelected: Boolean) {
-        if (isSelected) {
-            selectedItems.add(item)
-        } else {
-            selectedItems.remove(item)
+    fun updateIncomes() {
+        isRefreshing = true
+        getItems(TransactionType.INCOME) {
+            incomes.clear()
+            incomes.addAll(it)
+            isRefreshing = false
         }
     }
 
-    fun onExitEditMode() {
+    fun updateExpenses() {
+        isRefreshing = true
+        getItems(TransactionType.EXPENSE) {
+            expenses.clear()
+            expenses.addAll(it)
+            isRefreshing = false
+        }
+    }
+
+    fun onItemSelectionChanged(item: Item) {
+        if (item in selectedItems) {
+            selectedItems.remove(item)
+        } else {
+            selectedItems.add(item)
+        }
+    }
+
+    fun onCancelClicked() {
         selectedItems.clear()
     }
 
     fun onRemoveClicked() {
-//        TODO сделать удаление
-//        app.itemsAPI.removeItem()
+        selectedItems.forEach {
+            removeItem(it)
+        }
     }
+
+    private fun removeItem(item: Item) = compositeDisposable.add(
+        app.itemsAPI.removeItem(item.id, authToken)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    selectedItems.remove(item)
+                    expenses.remove(item)
+                    incomes.remove(item)
+                },
+                {}
+            )
+    )
 
 }

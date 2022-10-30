@@ -35,7 +35,10 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
         onRefresh = {
-
+            when(type) {
+                TransactionType.INCOME -> viewModel.updateIncomes()
+                TransactionType.EXPENSE -> viewModel.updateExpenses()
+            }
         }
     ) {
         LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -57,7 +60,6 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
 
 @Composable
 fun ItemView(viewModel: MainViewModel, item: Item) {
-    var isSelected = item in viewModel.selectedItems
     val textStyle = TextStyle(
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium
@@ -67,24 +69,19 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
         1 -> colorResource(id = R.color.apple_green)
         else -> colorResource(id = R.color.medium_grey)
     }
-    val backgroundColor = when (isSelected) {
+    val backgroundColor = when (item in viewModel.selectedItems) {
         true -> colorResource(id = R.color.selection_item_color)
         else -> colorResource(id = R.color.white)
-    }
-
-    fun switchSelection() {
-        isSelected = !isSelected
-        viewModel.onItemSelectionChanged(item, isSelected)
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .pointerInput(Unit) {
                 detectTapGestures(
-                    onLongPress = { switchSelection() },
+                    onLongPress = { viewModel.onItemSelectionChanged(item) },
                     onTap = {
                         if (viewModel.selectedItems.isNotEmpty()) {
-                            switchSelection()
+                            viewModel.onItemSelectionChanged(item)
                         }
                     }
                 )

@@ -135,7 +135,7 @@ fun EditingTopBar(viewModel: MainViewModel) {
             modifier = Modifier
                 .padding(16.dp)
                 .clickable {
-                    viewModel.onExitEditMode()
+                    viewModel.onCancelClicked()
                 }
         )
         Text(
@@ -148,7 +148,11 @@ fun EditingTopBar(viewModel: MainViewModel) {
         Image(
             painter = painterResource(id = R.drawable.ic_trash),
             contentDescription = "back_trash",
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable {
+                    viewModel.onRemoveClicked()
+                }
         )
     }
 }
