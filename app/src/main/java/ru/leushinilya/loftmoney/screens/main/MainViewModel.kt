@@ -2,6 +2,7 @@ package ru.leushinilya.loftmoney.screens.main
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -22,7 +23,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     var expenses by mutableStateOf(listOf<Item>())
     var incomes by mutableStateOf(listOf<Item>())
     var isRefreshing by mutableStateOf(false)
-    var selectedCount by mutableStateOf(0)
+    var selectedItems = mutableStateListOf<Item>()
 
     private val app = getApplication<LoftApp>()
     private val compositeDisposable = CompositeDisposable()
@@ -65,16 +66,21 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
         )
     }
 
-    fun onItemSelectionChanged(isSelected: Boolean) {
+    fun onItemSelectionChanged(item: Item, isSelected: Boolean) {
         if (isSelected) {
-            selectedCount++
+            selectedItems.add(item)
         } else {
-            selectedCount--
+            selectedItems.remove(item)
         }
     }
 
     fun onExitEditMode() {
-        selectedCount = 0
+        selectedItems.clear()
+    }
+
+    fun onRemoveClicked() {
+//        TODO сделать удаление
+//        app.itemsAPI.removeItem()
     }
 
 }

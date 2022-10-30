@@ -57,7 +57,7 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
 
 @Composable
 fun ItemView(viewModel: MainViewModel, item: Item) {
-    var isSelected by remember { mutableStateOf(false) }
+    var isSelected = item in viewModel.selectedItems
     val textStyle = TextStyle(
         fontSize = 20.sp,
         fontWeight = FontWeight.Medium
@@ -74,7 +74,7 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
 
     fun switchSelection() {
         isSelected = !isSelected
-        viewModel.onItemSelectionChanged(isSelected)
+        viewModel.onItemSelectionChanged(item, isSelected)
     }
     Row(
         modifier = Modifier
@@ -82,7 +82,11 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = { switchSelection() },
-                    onTap = { if (viewModel.selectedCount > 0) switchSelection() }
+                    onTap = {
+                        if (viewModel.selectedItems.isNotEmpty()) {
+                            switchSelection()
+                        }
+                    }
                 )
             }
             .background(backgroundColor)

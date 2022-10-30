@@ -39,9 +39,8 @@ fun MainScreen(
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
-//    TODO: Поправить перекраску стутус бара
     val systemUiController = rememberSystemUiController()
-    val backgroundColor = if (viewModel.selectedCount > 0) {
+    val backgroundColor = if (viewModel.selectedItems.isNotEmpty()) {
         colorResource(id = R.color.selection_tab_color)
     } else {
         colorResource(id = R.color.lightish_blue)
@@ -50,7 +49,7 @@ fun MainScreen(
     LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
     Scaffold(
         topBar = {
-            if (viewModel.selectedCount > 0) {
+            if (viewModel.selectedItems.isNotEmpty()) {
                 EditingTopBar(viewModel)
             } else {
                 TopBar()
@@ -140,7 +139,7 @@ fun EditingTopBar(viewModel: MainViewModel) {
                 }
         )
         Text(
-            text = "${stringResource(id = R.string.tool_bar_title_selection)} ${viewModel.selectedCount}",
+            text = "${stringResource(id = R.string.tool_bar_title_selection)} ${viewModel.selectedItems.size}",
             color = colorResource(id = R.color.white),
             fontWeight = FontWeight(700),
             fontSize = 20.sp,
