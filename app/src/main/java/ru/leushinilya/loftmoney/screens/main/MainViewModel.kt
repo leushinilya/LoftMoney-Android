@@ -17,26 +17,24 @@ import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 
 //TODO:
-// refresher при смене ориентации экрана зависает
-// при удалении не обновляется список
 // после удаления выделяются не те элементы, что были нажаты
-//
 
 class MainViewModel(application: Application) : AndroidViewModel(application),
     LifecycleEventObserver {
 
-    var expenses = mutableStateListOf<Item>()
-    var incomes = mutableStateListOf<Item>()
+    val expenses = mutableStateListOf<Item>()
+    val incomes = mutableStateListOf<Item>()
     var selectedItems = mutableStateListOf<Item>()
     var isRefreshing by mutableStateOf(false)
 
     private val app = getApplication<LoftApp>()
-    private val compositeDisposable = CompositeDisposable()
+    private var compositeDisposable = CompositeDisposable()
     private val authToken = app.preferences.getString(LoftApp.AUTH_KEY, "")
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
             Lifecycle.Event.ON_RESUME -> {
+                compositeDisposable = CompositeDisposable()
                 updateExpenses()
                 updateIncomes()
             }
@@ -60,7 +58,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
                             }
                         )
                     },
-                    {}
+                    {
+                        isRefreshing = false
+                    }
                 )
         )
     }

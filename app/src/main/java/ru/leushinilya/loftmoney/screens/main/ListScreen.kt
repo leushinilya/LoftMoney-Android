@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
@@ -35,7 +35,7 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
     SwipeRefresh(
         state = rememberSwipeRefreshState(viewModel.isRefreshing),
         onRefresh = {
-            when(type) {
+            when (type) {
                 TransactionType.INCOME -> viewModel.updateIncomes()
                 TransactionType.EXPENSE -> viewModel.updateExpenses()
             }
@@ -79,11 +79,7 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
             .pointerInput(Unit) {
                 detectTapGestures(
                     onLongPress = { viewModel.onItemSelectionChanged(item) },
-                    onTap = {
-                        if (viewModel.selectedItems.isNotEmpty()) {
-                            viewModel.onItemSelectionChanged(item)
-                        }
-                    }
+                    onTap = { viewModel.onItemSelectionChanged(item) }
                 )
             }
             .background(backgroundColor)
