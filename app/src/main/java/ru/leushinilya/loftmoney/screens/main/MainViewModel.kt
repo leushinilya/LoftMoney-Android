@@ -17,7 +17,7 @@ import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 
 //TODO:
-// после удаления выделяются не те элементы, что были нажаты
+// тип транзакции попадает не в тот список
 
 class MainViewModel(application: Application) : AndroidViewModel(application),
     LifecycleEventObserver {

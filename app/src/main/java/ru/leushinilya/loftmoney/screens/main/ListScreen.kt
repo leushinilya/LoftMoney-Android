@@ -46,7 +46,7 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
                 TransactionType.EXPENSE -> viewModel.expenses
                 TransactionType.INCOME -> viewModel.incomes
             }
-            items(list) { transaction ->
+            items(items = list, key = { it.id }) { transaction ->
                 ItemView(viewModel = viewModel, item = transaction)
                 Divider(
                     color = colorResource(id = R.color.medium_grey),
