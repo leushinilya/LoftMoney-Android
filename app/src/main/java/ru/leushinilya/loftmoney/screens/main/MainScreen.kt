@@ -58,10 +58,10 @@ fun MainScreen(
         floatingActionButton = {
             when (pagerState.currentPage) {
                 0 -> {
-                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.EXPENSE}") }
+                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.EXPENSE.value}") }
                 }
                 1 -> {
-                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.INCOME}") }
+                    AddItemFab { navController.navigate("${Screens.ADD_ITEM.name}/${TransactionType.INCOME.value}") }
                 }
             }
         }

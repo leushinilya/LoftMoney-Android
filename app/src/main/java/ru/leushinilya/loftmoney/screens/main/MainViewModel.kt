@@ -16,9 +16,6 @@ import ru.leushinilya.loftmoney.LoftApp
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 
-//TODO:
-// тип транзакции попадает не в тот список
-
 class MainViewModel(application: Application) : AndroidViewModel(application),
     LifecycleEventObserver {
 

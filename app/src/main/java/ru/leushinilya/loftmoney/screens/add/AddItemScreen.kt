@@ -38,8 +38,8 @@ fun AddItemScreen(
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     val color = when (type) {
-        TransactionType.INCOME.name -> colorResource(id = R.color.apple_green)
-        TransactionType.EXPENSE.name -> colorResource(id = R.color.dark_sky_blue)
+        TransactionType.INCOME.value -> colorResource(id = R.color.apple_green)
+        TransactionType.EXPENSE.value -> colorResource(id = R.color.dark_sky_blue)
         else -> return
     }
 
