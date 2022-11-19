@@ -1,48 +1,46 @@
-package ru.leushinilya.loftmoney;
+package ru.leushinilya.loftmoney
 
-import android.app.Application;
-import android.content.SharedPreferences;
+import android.app.Application
+import android.content.SharedPreferences
+import dagger.hilt.android.HiltAndroidApp
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import ru.leushinilya.loftmoney.remote.AuthAPI
+import ru.leushinilya.loftmoney.remote.ItemsAPI
 
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
-import ru.leushinilya.loftmoney.remote.AuthAPI;
-import ru.leushinilya.loftmoney.remote.ItemsAPI;
+@HiltAndroidApp
+class LoftApp : Application() {
 
-public class LoftApp extends Application {
+    lateinit var itemsAPI: ItemsAPI
+    lateinit var authAPI: AuthAPI
+    lateinit var preferences: SharedPreferences
 
-    public ItemsAPI itemsAPI;
-    public AuthAPI authAPI;
-    public static String AUTH_KEY = "authKey";
-    public SharedPreferences preferences;
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        configureRetrofit();
-        preferences = getSharedPreferences(getString(R.string.app_name), 0);
+    override fun onCreate() {
+        super.onCreate()
+        configureRetrofit()
+        preferences = getSharedPreferences(getString(R.string.app_name), 0)
     }
 
-    private void configureRetrofit() {
-        HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    private fun configureRetrofit() {
+        val httpLoggingInterceptor = HttpLoggingInterceptor()
+        httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://loftschool.com/android-api/basic/v1/")
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .build()
+        itemsAPI = retrofit.create(ItemsAPI::class.java)
+        authAPI = retrofit.create(AuthAPI::class.java)
+    }
 
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(httpLoggingInterceptor)
-                .build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://verdant-violet.glitch.me/")
-                .baseUrl("https://loftschool.com/android-api/basic/v1/")
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build();
-
-        itemsAPI = retrofit.create(ItemsAPI.class);
-        authAPI = retrofit.create(AuthAPI.class);
+    companion object {
+        var AUTH_KEY = "authKey"
     }
 }
