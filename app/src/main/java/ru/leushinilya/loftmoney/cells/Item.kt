@@ -1,6 +1,6 @@
 package ru.leushinilya.loftmoney.cells
 
-import ru.leushinilya.loftmoney.remote.RemoteItem
+import ru.leushinilya.loftmoney.data.remote.RemoteItem
 
 data class Item(
     val id: String,

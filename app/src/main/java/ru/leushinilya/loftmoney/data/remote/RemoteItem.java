@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.remote;
+package ru.leushinilya.loftmoney.data.remote;
 
 import android.widget.Toast;
 

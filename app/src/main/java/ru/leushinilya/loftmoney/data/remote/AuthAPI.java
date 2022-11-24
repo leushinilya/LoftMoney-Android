@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.remote;
+package ru.leushinilya.loftmoney.data.remote;
 
 import io.reactivex.Single;
 import retrofit2.http.GET;

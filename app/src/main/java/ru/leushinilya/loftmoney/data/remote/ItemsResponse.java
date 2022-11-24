@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.remote;
+package ru.leushinilya.loftmoney.data.remote;
 
 import com.google.gson.annotations.SerializedName;
 

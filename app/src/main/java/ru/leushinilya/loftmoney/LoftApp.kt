@@ -8,8 +8,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.leushinilya.loftmoney.remote.AuthAPI
-import ru.leushinilya.loftmoney.remote.ItemsAPI
+import ru.leushinilya.loftmoney.data.remote.AuthAPI
+import ru.leushinilya.loftmoney.data.remote.ItemsAPI
 
 @HiltAndroidApp
 class LoftApp : Application() {
