@@ -1,24 +1,29 @@
 package ru.leushinilya.loftmoney.screens.login
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import ru.leushinilya.loftmoney.LoftApp
+import ru.leushinilya.loftmoney.data.repository.AuthRepository
+import ru.leushinilya.loftmoney.data.repository.PreferencesRepository
+import javax.inject.Inject
 
-class LoginViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+    private val preferencesRepository: PreferencesRepository
+) : ViewModel() {
 
     val googleSignIntent = MutableLiveData<Intent>()
     val authorized = MutableLiveData(false)
 
     private val compositeDisposable = CompositeDisposable()
-    private val app = getApplication<LoftApp>()
 
     fun onLoginClicked(activity: Activity) {
         val signOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -30,12 +35,14 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onIdReceived(userId: String) {
         compositeDisposable.add(
-            app.itemsAPI.makeLogin(userId)
+            authRepository.makeLogin(userId)
+                .flatMapCompletable {
+                    preferencesRepository.setAuthToken(it.authToken)
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
-                        app.preferences.edit().putString(LoftApp.AUTH_KEY, it.authToken).apply()
                         authorized.postValue(true)
                     },
                     {}

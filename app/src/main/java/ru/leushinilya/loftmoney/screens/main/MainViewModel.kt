@@ -1,32 +1,33 @@
 package ru.leushinilya.loftmoney.screens.main
 
-import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import ru.leushinilya.loftmoney.LoftApp
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
+import ru.leushinilya.loftmoney.data.repository.ItemsRepository
+import javax.inject.Inject
 
-class MainViewModel(application: Application) : AndroidViewModel(application),
-    LifecycleEventObserver {
+@HiltViewModel
+class MainViewModel @Inject constructor(
+    private val itemsRepository: ItemsRepository
+) : ViewModel(), LifecycleEventObserver {
 
     val expenses = mutableStateListOf<Item>()
     val incomes = mutableStateListOf<Item>()
     var selectedItems = mutableStateListOf<Item>()
     var isRefreshing by mutableStateOf(false)
 
-    private val app = getApplication<LoftApp>()
     private var compositeDisposable = CompositeDisposable()
-    private val authToken = app.preferences.getString(LoftApp.AUTH_KEY, "")
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         when (event) {
@@ -44,7 +45,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
 
     private fun getItems(transactionType: TransactionType, onSuccess: (List<Item>) -> Unit) {
         compositeDisposable.add(
-            app.itemsAPI.getItems(transactionType.value, authToken)
+            itemsRepository.getItems(transactionType.value)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -99,7 +100,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application),
     }
 
     private fun removeItem(item: Item) = compositeDisposable.add(
-        app.itemsAPI.removeItem(item.id, authToken)
+        itemsRepository.removeItem(item.id)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

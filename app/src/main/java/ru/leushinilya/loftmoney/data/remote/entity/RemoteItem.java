@@ -1,6 +1,4 @@
-package ru.leushinilya.loftmoney.data.remote;
-
-import android.widget.Toast;
+package ru.leushinilya.loftmoney.data.remote.entity;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -47,7 +45,7 @@ public class RemoteItem {
         return date;
     }
 
-    public Date getDate(){
+    public Date getDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             return simpleDateFormat.parse(date);

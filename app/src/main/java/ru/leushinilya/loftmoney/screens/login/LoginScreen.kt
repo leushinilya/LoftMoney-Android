@@ -11,6 +11,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,7 +50,9 @@ fun LoginScreen(
     )
     val intent = viewModel.googleSignIntent.observeAsState()
     if (intent.value != null) {
-        launcher.launch(intent.value)
+        SideEffect {
+            launcher.launch(intent.value)
+        }
     }
     val activity = LocalContext.current as Activity
     Column(
