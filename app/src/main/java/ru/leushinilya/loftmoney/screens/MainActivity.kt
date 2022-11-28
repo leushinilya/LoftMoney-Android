@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -15,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
-import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.screens.add.AddItemScreen
 import ru.leushinilya.loftmoney.screens.login.LoginScreen
 import ru.leushinilya.loftmoney.screens.main.MainScreen
@@ -27,10 +27,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: MainActivityViewModel = viewModel()
+            LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
             val navController: NavHostController = rememberNavController()
             val startDestination = when (viewModel.authorized) {
                 true -> Screens.MAIN.name
                 false -> Screens.LOGIN.name
+                null -> return@setContent
             }
             NavHost(
                 navController = navController,
@@ -51,6 +53,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        setTheme(R.style.Theme_Loftmoney)
     }
 }

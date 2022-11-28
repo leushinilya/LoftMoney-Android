@@ -19,7 +19,7 @@ class MainActivityViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel(), LifecycleEventObserver {
 
-    var authorized by mutableStateOf(false)
+    var authorized: Boolean? by mutableStateOf(null)
 
     private val compositeDisposable = CompositeDisposable()
 
