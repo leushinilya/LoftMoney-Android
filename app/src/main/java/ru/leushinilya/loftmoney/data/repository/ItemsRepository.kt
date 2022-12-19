@@ -1,15 +1,13 @@
 package ru.leushinilya.loftmoney.data.repository
 
-import io.reactivex.Completable
-import io.reactivex.Single
 import ru.leushinilya.loftmoney.data.remote.entity.RemoteItem
 
 interface ItemsRepository {
 
-    fun getItems(type: String): Single<List<RemoteItem>>
+    suspend fun getItems(type: String): List<RemoteItem>
 
-    fun postItem(price: Float, name: String, type: String): Completable
+    suspend fun postItem(price: Float, name: String, type: String)
 
-    fun removeItem(id: String): Completable
+    suspend fun removeItem(id: String)
 
 }

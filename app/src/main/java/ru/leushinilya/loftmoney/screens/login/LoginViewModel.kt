@@ -4,12 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.data.repository.AuthRepository
 import ru.leushinilya.loftmoney.data.repository.PreferencesRepository
 import javax.inject.Inject
@@ -23,8 +22,6 @@ class LoginViewModel @Inject constructor(
     val googleSignIntent = MutableLiveData<Intent>()
     val authorized = MutableLiveData(false)
 
-    private val compositeDisposable = CompositeDisposable()
-
     fun onLoginClicked(activity: Activity) {
         val signOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -34,25 +31,15 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onIdReceived(userId: String) {
-        compositeDisposable.add(
-            authRepository.makeLogin(userId)
-                .flatMapCompletable {
-                    preferencesRepository.setAuthToken(it.authToken)
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        authorized.postValue(true)
-                    },
-                    {}
-                )
-        )
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
+        viewModelScope.launch {
+            try {
+                val authResponse = authRepository.makeLogin(userId)
+                preferencesRepository.setAuthToken(authResponse.authToken)
+                authorized.postValue(true)
+            } catch (e: Exception) {
+                authorized.postValue(false)
+            }
+        }
     }
 
 }

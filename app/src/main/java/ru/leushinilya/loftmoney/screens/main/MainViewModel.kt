@@ -4,14 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 import ru.leushinilya.loftmoney.data.repository.ItemsRepository
@@ -27,40 +22,22 @@ class MainViewModel @Inject constructor(
     var selectedItems = mutableStateListOf<Item>()
     var isRefreshing by mutableStateOf(false)
 
-    private var compositeDisposable = CompositeDisposable()
-
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        when (event) {
-            Lifecycle.Event.ON_RESUME -> {
-                compositeDisposable = CompositeDisposable()
-                updateExpenses()
-                updateIncomes()
-            }
-            Lifecycle.Event.ON_DESTROY -> {
-                compositeDisposable.dispose()
-            }
-            else -> {}
+        if (event == Lifecycle.Event.ON_RESUME) {
+            updateExpenses()
+            updateIncomes()
         }
     }
 
     private fun getItems(transactionType: TransactionType, onSuccess: (List<Item>) -> Unit) {
-        compositeDisposable.add(
-            itemsRepository.getItems(transactionType.value)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        onSuccess(
-                            it.map { remoteItem ->
-                                Item.getInstance(remoteItem)
-                            }
-                        )
-                    },
-                    {
-                        isRefreshing = false
-                    }
-                )
-        )
+        viewModelScope.launch {
+            try {
+                val remoteItems = itemsRepository.getItems(transactionType.value)
+                onSuccess(remoteItems.map { Item.getInstance(it) })
+            } catch (e: Exception) {
+                isRefreshing = false
+            }
+        }
     }
 
     fun updateIncomes() {
@@ -99,18 +76,17 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun removeItem(item: Item) = compositeDisposable.add(
-        itemsRepository.removeItem(item.id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    selectedItems.remove(item)
-                    expenses.remove(item)
-                    incomes.remove(item)
-                },
-                {}
-            )
-    )
+    private fun removeItem(item: Item) {
+        viewModelScope.launch {
+            try {
+                itemsRepository.removeItem(item.id)
+                selectedItems.remove(item)
+                expenses.remove(item)
+                incomes.remove(item)
+            } catch (e: Exception) {
+                selectedItems.clear()
+            }
+        }
+    }
 
 }
