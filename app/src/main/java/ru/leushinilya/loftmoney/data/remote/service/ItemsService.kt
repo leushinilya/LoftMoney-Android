@@ -1,6 +1,7 @@
 package ru.leushinilya.loftmoney.data.remote.service
 
 import retrofit2.http.*
+import ru.leushinilya.loftmoney.data.remote.entity.Balance
 import ru.leushinilya.loftmoney.data.remote.entity.RemoteItem
 
 interface ItemsService {
@@ -19,5 +20,8 @@ interface ItemsService {
     @POST("./items/remove")
     @FormUrlEncoded
     suspend fun removeItem(@Field("id") id: String)
+
+    @GET("./balance")
+    suspend fun getBalance(): Balance
 
 }

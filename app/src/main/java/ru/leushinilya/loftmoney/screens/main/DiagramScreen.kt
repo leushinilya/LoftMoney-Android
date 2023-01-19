@@ -6,20 +6,24 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import ru.leushinilya.loftmoney.R
 
-@Preview
 @Composable
-fun DiagramScreen(expensesSum: Float = 0F, incomesSum: Float = 0F) {
+fun DiagramScreen(viewModel: MainViewModel) {
+
+    val balanceState = viewModel.balance.collectAsState()
+    val incomesSum = balanceState.value?.totalIncomes ?: 0.0
+    val expensesSum = balanceState.value?.totalExpenses ?: 0.0
+    val balance = incomesSum - expensesSum
 
     ConstraintLayout(
         modifier = Modifier
@@ -42,7 +46,7 @@ fun DiagramScreen(expensesSum: Float = 0F, incomesSum: Float = 0F) {
                 color = colorResource(id = R.color.medium_grey)
             )
             Text(
-                text = (incomesSum - expensesSum).toString(),
+                text = balance.toString(),
                 fontSize = 48.sp,
                 color = colorResource(id = R.color.pale_orange),
                 fontWeight = FontWeight(500)
@@ -104,8 +108,8 @@ fun DiagramScreen(expensesSum: Float = 0F, incomesSum: Float = 0F) {
                     bottom.linkTo(parent.bottom)
                 }
                 .padding(16.dp),
-            expenses = expensesSum,
-            incomes = incomesSum
+            expenses = expensesSum.toFloat(),
+            incomes = incomesSum.toFloat()
         )
     }
 

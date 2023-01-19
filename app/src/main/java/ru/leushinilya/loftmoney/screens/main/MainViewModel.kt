@@ -6,9 +6,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
+import ru.leushinilya.loftmoney.data.remote.entity.Balance
 import ru.leushinilya.loftmoney.data.repository.ItemsRepository
 import javax.inject.Inject
 
@@ -21,11 +23,13 @@ class MainViewModel @Inject constructor(
     val incomes = mutableStateListOf<Item>()
     var selectedItems = mutableStateListOf<Item>()
     var isRefreshing by mutableStateOf(false)
+    val balance = MutableStateFlow<Balance?>(null)
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         if (event == Lifecycle.Event.ON_RESUME) {
             updateExpenses()
             updateIncomes()
+            getBalance()
         }
     }
 
@@ -85,6 +89,16 @@ class MainViewModel @Inject constructor(
                 incomes.remove(item)
             } catch (e: Exception) {
                 selectedItems.clear()
+            }
+        }
+    }
+
+    private fun getBalance() {
+        viewModelScope.launch {
+            try {
+                balance.emit(itemsRepository.getBalance())
+            } catch (e: java.lang.Exception) {
+//                TODO show error
             }
         }
     }

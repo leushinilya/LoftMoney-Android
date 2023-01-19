@@ -99,10 +99,7 @@ fun MainScreen(
                 when (page) {
                     0 -> ListScreen(viewModel, TransactionType.EXPENSE)
                     1 -> ListScreen(viewModel, TransactionType.INCOME)
-                    2 -> DiagramScreen(
-                        viewModel.expenses.sumOf { it.price.toDouble() }.toFloat(),
-                        viewModel.incomes.sumOf { it.price.toDouble() }.toFloat()
-                    )
+                    2 -> DiagramScreen(viewModel)
                 }
             }
         }
