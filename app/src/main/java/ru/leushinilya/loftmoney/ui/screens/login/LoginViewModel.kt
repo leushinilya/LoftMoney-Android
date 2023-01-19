@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.login
+package ru.leushinilya.loftmoney.ui.screens.login
 
 import android.app.Activity
 import android.content.Intent

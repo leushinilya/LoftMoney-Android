@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.add
+package ru.leushinilya.loftmoney.ui.screens.add
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -39,7 +39,7 @@ fun AddItemScreen(
     var price by remember { mutableStateOf("") }
     val color = when (type) {
         TransactionType.INCOME.value -> colorResource(id = R.color.apple_green)
-        TransactionType.EXPENSE.value -> colorResource(id = R.color.dark_sky_blue)
+        TransactionType.EXPENSE.value -> colorResource(id = R.color.lightish_blue)
         else -> return
     }
 

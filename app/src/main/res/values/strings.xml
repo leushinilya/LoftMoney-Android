@@ -1,26 +1,15 @@
 <resources>
-    <string name="app_name">Loftmoney</string>
     <string name="edittext_title_hint">Title</string>
     <string name="edittext_price_hint">Price</string>
     <string name="button_add_text">Add</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="connection_lost">Server is not available</string>
     <string name="budget_accounting">Budget accounting</string>
     <string name="tool_bar_title_selection">"Selected: "</string>
     <string name="action_login">Login</string>
 
-    <string name="delete_dialog_title">Delete selected items?</string>
-    <string name="delete_dialog_yes">Yes</string>
-    <string name="delete_dialog_no">No</string>
     <string name="available_finance">"Available finance"</string>
     <string name="expences">"Expenses"</string>
     <string name="incomes">"Incomes"</string>
     <string name="balance">Balance</string>
     <string name="fill_all_data">Fill all data</string>
 
-    <array name="main_pager_titles">
-        <item>expenses</item>
-        <item>incomes</item>
-        <item>balance</item>
-    </array>
 </resources>

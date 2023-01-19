@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main
+package ru.leushinilya.loftmoney.ui.screens.main
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -48,7 +48,7 @@ fun DiagramScreen(viewModel: MainViewModel) {
             Text(
                 text = balance.toString(),
                 fontSize = 48.sp,
-                color = colorResource(id = R.color.pale_orange),
+                color = colorResource(id = R.color.marigold),
                 fontWeight = FontWeight(500)
             )
         }
@@ -72,7 +72,7 @@ fun DiagramScreen(viewModel: MainViewModel) {
             Text(
                 text = expensesSum.toString(),
                 fontSize = 24.sp,
-                color = colorResource(id = R.color.dark_sky_blue),
+                color = colorResource(id = R.color.lightish_blue),
                 fontWeight = FontWeight(500)
             )
         }
@@ -121,7 +121,7 @@ fun Diagram(
     expenses: Float,
     incomes: Float
 ) {
-    val expensesColor = colorResource(id = R.color.dark_sky_blue)
+    val expensesColor = colorResource(id = R.color.lightish_blue)
     val incomesColor = colorResource(id = R.color.apple_green)
     val expensesAngle = (expenses / (expenses + incomes) * 360)
     val incomesAngle = (incomes / (expenses + incomes) * 360)

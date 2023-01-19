@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main
+package ru.leushinilya.loftmoney.ui.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

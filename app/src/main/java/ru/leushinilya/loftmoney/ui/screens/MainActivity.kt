@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens
+package ru.leushinilya.loftmoney.ui.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,9 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
-import ru.leushinilya.loftmoney.screens.add.AddItemScreen
-import ru.leushinilya.loftmoney.screens.login.LoginScreen
-import ru.leushinilya.loftmoney.screens.main.MainScreen
+import ru.leushinilya.loftmoney.ui.screens.add.AddItemScreen
+import ru.leushinilya.loftmoney.ui.screens.login.LoginScreen
+import ru.leushinilya.loftmoney.ui.screens.main.MainScreen
 
 @AndroidEntryPoint
 @ExperimentalPagerApi

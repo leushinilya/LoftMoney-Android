@@ -1,37 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
-<!--    default colors-->
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
 
-<!--    main-->
+    <!--    main-->
+    <color name="white">#FFFFFFFF</color>
     <color name="lightish_blue">#3574fa</color>
     <color name="dark_sky_blue">#4a90e2</color>
 
-<!--    AddItemActivity addButton-->
+    <!--    AddItemActivity addButton-->
     <color name="apple_green">#7ed321</color>
     <color name="white_three">#eaeaea</color>
 
-<!--    selection-->
+    <!--    selection-->
     <color name="selection_tab_color">#333f59</color>
     <color name="selection_item_color">#f2f2f2</color>
-    <color name="selection_text_color">#b38baaef</color>
 
-<!--    AddItemActivity editText-->
-    <color name="hint_color">#dbdbdb</color>
-    <color name="text_color">#3574fa</color>
-
+    <!--    AddItemActivity editText-->
     <color name="medium_grey">#666664</color>
-    <color name="pale_orange">#ff9e57</color>
     <color name="marigold">#ffc107</color>
-
-    <color name="tabs_text">#b38baaef</color>
-
 
 </resources>

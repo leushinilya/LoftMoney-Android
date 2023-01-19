@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.login
+package ru.leushinilya.loftmoney.ui.screens.login
 
 import android.app.Activity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,7 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import ru.leushinilya.loftmoney.R
-import ru.leushinilya.loftmoney.screens.Screens
+import ru.leushinilya.loftmoney.ui.screens.Screens
 
 @Composable
 fun LoginScreen(

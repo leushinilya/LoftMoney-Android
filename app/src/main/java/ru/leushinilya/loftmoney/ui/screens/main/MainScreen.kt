@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.main
+package ru.leushinilya.loftmoney.ui.screens.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -28,7 +27,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
-import ru.leushinilya.loftmoney.screens.Screens
+import ru.leushinilya.loftmoney.ui.screens.Screens
 
 @ExperimentalPagerApi
 @Composable
@@ -106,6 +105,7 @@ fun MainScreen(
     }
 }
 
+@Preview
 @Composable
 fun TopBar() {
     TopAppBar(
@@ -163,8 +163,3 @@ fun AddItemFab(onClick: () -> Unit) {
         Image(painter = painterResource(id = R.drawable.add_icon), contentDescription = "add")
     }
 }
-
-@ExperimentalPagerApi
-@Preview
-@Composable
-fun MainScreenPreview() = MainScreen(navController = rememberNavController())

@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens
+package ru.leushinilya.loftmoney.ui.screens
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

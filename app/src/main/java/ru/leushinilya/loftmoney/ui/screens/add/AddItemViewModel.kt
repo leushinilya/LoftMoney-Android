@@ -1,4 +1,4 @@
-package ru.leushinilya.loftmoney.screens.add
+package ru.leushinilya.loftmoney.ui.screens.add
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

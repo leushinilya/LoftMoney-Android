@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Loftmoney">
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".ui.screens.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Loftmoney.Splash">
             <intent-filter>
