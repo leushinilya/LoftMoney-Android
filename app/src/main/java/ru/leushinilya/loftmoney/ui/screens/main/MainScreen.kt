@@ -6,17 +6,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -28,6 +26,7 @@ import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.ui.screens.Screens
+import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @ExperimentalPagerApi
 @Composable
@@ -40,9 +39,9 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
     val systemUiController = rememberSystemUiController()
     val backgroundColor = if (viewModel.selectedItems.isNotEmpty()) {
-        colorResource(id = R.color.selection_tab_color)
+        LoftTheme.colors.interactionBackground
     } else {
-        colorResource(id = R.color.lightish_blue)
+        LoftTheme.colors.primaryBackground
     }
     systemUiController.setStatusBarColor(backgroundColor)
     LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
@@ -70,7 +69,7 @@ fun MainScreen(
                 selectedTabIndex = pagerState.currentPage,
                 indicator = {
                     TabRowDefaults.Indicator(
-                        color = colorResource(id = R.color.marigold),
+                        color = LoftTheme.colors.secondaryBackground,
                         modifier = Modifier.pagerTabIndicatorOffset(pagerState, it)
                     )
                 }
@@ -78,7 +77,11 @@ fun MainScreen(
                 screens.forEach {
                     Tab(
                         text = {
-                            Text(stringResource(id = it.titleRes))
+                            Text(
+                                text = stringResource(id = it.titleRes),
+                                style = LoftTheme.typography.tabs,
+                                color = LoftTheme.colors.contentBackground
+                            )
                         },
                         onClick = {
                             coroutineScope.launch {
@@ -108,23 +111,48 @@ fun MainScreen(
 @Preview
 @Composable
 fun TopBar() {
+    var showMenu by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(
                 text = stringResource(id = Screens.MAIN.titleRes),
-                color = colorResource(id = R.color.white),
-                fontWeight = FontWeight(700),
-                fontSize = 20.sp
+                color = LoftTheme.colors.contentBackground,
+                style = LoftTheme.typography.toolbar
             )
         },
-        backgroundColor = colorResource(id = R.color.lightish_blue)
+        backgroundColor = LoftTheme.colors.primaryBackground,
+        actions = {
+            IconButton(onClick = { showMenu = !showMenu }) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = null,
+                    tint = LoftTheme.colors.contentBackground
+                )
+            }
+            DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text(
+                        text= "Logout",
+                        style = LoftTheme.typography.contentSmall,
+                        color = LoftTheme.colors.primaryText
+                    )
+                }
+                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                    Text(
+                        text = "Themes",
+                        style = LoftTheme.typography.contentSmall,
+                        color = LoftTheme.colors.primaryText
+                    )
+                }
+            }
+        }
     )
 }
 
 @Composable
 fun EditingTopBar(viewModel: MainViewModel) {
     TopAppBar(
-        backgroundColor = colorResource(id = R.color.selection_tab_color)
+        backgroundColor = LoftTheme.colors.interactionBackground
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_back),
@@ -137,9 +165,8 @@ fun EditingTopBar(viewModel: MainViewModel) {
         )
         Text(
             text = "${stringResource(id = R.string.tool_bar_title_selection)} ${viewModel.selectedItems.size}",
-            color = colorResource(id = R.color.white),
-            fontWeight = FontWeight(700),
-            fontSize = 20.sp,
+            color = LoftTheme.colors.contentBackground,
+            style = LoftTheme.typography.toolbar,
             modifier = Modifier.weight(1F)
         )
         Image(
@@ -158,7 +185,7 @@ fun EditingTopBar(viewModel: MainViewModel) {
 fun AddItemFab(onClick: () -> Unit) {
     FloatingActionButton(
         onClick = onClick,
-        backgroundColor = colorResource(id = R.color.marigold)
+        backgroundColor = LoftTheme.colors.secondaryBackground
     ) {
         Image(painter = painterResource(id = R.drawable.add_icon), contentDescription = "add")
     }

@@ -9,13 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Composable
 fun DiagramScreen(viewModel: MainViewModel) {
@@ -28,7 +26,7 @@ fun DiagramScreen(viewModel: MainViewModel) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.white))
+            .background(LoftTheme.colors.contentBackground)
     ) {
         val (available, expenses, incomes, diagram) = createRefs()
         Column(
@@ -42,14 +40,13 @@ fun DiagramScreen(viewModel: MainViewModel) {
         ) {
             Text(
                 text = stringResource(id = R.string.available_finance),
-                fontSize = 14.sp,
-                color = colorResource(id = R.color.medium_grey)
+                style = LoftTheme.typography.contentNormal,
+                color = LoftTheme.colors.primaryText
             )
             Text(
                 text = balance.toString(),
-                fontSize = 48.sp,
-                color = colorResource(id = R.color.marigold),
-                fontWeight = FontWeight(500)
+                style = LoftTheme.typography.contentLarge,
+                color = LoftTheme.colors.secondaryBackground
             )
         }
 
@@ -61,19 +58,18 @@ fun DiagramScreen(viewModel: MainViewModel) {
                     end.linkTo(incomes.start)
                 }
                 .fillMaxWidth(0.5F)
-                .border(width = 1.dp, color = colorResource(id = R.color.selection_item_color))
+                .border(width = 1.dp, color = LoftTheme.colors.hint)
                 .padding(16.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.expences),
-                fontSize = 10.sp,
-                color = colorResource(id = R.color.medium_grey)
+                style = LoftTheme.typography.contentSmall,
+                color = LoftTheme.colors.primaryText
             )
             Text(
                 text = expensesSum.toString(),
-                fontSize = 24.sp,
-                color = colorResource(id = R.color.lightish_blue),
-                fontWeight = FontWeight(500)
+                style = LoftTheme.typography.contentNormal,
+                color = LoftTheme.colors.expense
             )
         }
 
@@ -85,19 +81,18 @@ fun DiagramScreen(viewModel: MainViewModel) {
                     end.linkTo(parent.end)
                 }
                 .fillMaxWidth(0.5F)
-                .border(width = 1.dp, color = colorResource(id = R.color.selection_item_color))
+                .border(width = 1.dp, color = LoftTheme.colors.hint)
                 .padding(16.dp)
         ) {
             Text(
                 text = stringResource(id = R.string.incomes),
-                fontSize = 10.sp,
-                color = colorResource(id = R.color.medium_grey)
+                style = LoftTheme.typography.contentSmall,
+                color = LoftTheme.colors.primaryText
             )
             Text(
                 text = incomesSum.toString(),
-                fontSize = 24.sp,
-                color = colorResource(id = R.color.apple_green),
-                fontWeight = FontWeight(500)
+                style = LoftTheme.typography.contentNormal,
+                color = LoftTheme.colors.income
             )
         }
 
@@ -121,8 +116,8 @@ fun Diagram(
     expenses: Float,
     incomes: Float
 ) {
-    val expensesColor = colorResource(id = R.color.lightish_blue)
-    val incomesColor = colorResource(id = R.color.apple_green)
+    val expensesColor = LoftTheme.colors.expense
+    val incomesColor = LoftTheme.colors.income
     val expensesAngle = (expenses / (expenses + incomes) * 360)
     val incomesAngle = (incomes / (expenses + incomes) * 360)
 

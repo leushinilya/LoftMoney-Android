@@ -19,6 +19,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.leushinilya.loftmoney.ui.screens.add.AddItemScreen
 import ru.leushinilya.loftmoney.ui.screens.login.LoginScreen
 import ru.leushinilya.loftmoney.ui.screens.main.MainScreen
+import ru.leushinilya.loftmoney.ui.themes.LoftColorStyle
+import ru.leushinilya.loftmoney.ui.themes.LoftFontStyle
+import ru.leushinilya.loftmoney.ui.themes.MainTheme
 
 @AndroidEntryPoint
 @ExperimentalPagerApi
@@ -26,30 +29,31 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainActivityViewModel = viewModel()
-            LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
-            val navController: NavHostController = rememberNavController()
-            val startDestination = when (viewModel.authorized) {
-                true -> Screens.MAIN.name
-                false -> Screens.LOGIN.name
-                null -> return@setContent
-            }
-            NavHost(
-                navController = navController,
-                startDestination = startDestination,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                composable(Screens.LOGIN.name) { LoginScreen(navController, hiltViewModel()) }
-                composable(Screens.MAIN.name) { MainScreen(navController, hiltViewModel()) }
-                composable(
-                    route = "${Screens.ADD_ITEM.name}/{type}",
-                    arguments = listOf(navArgument("type") { type = NavType.StringType })
+            MainTheme(colorStyle = LoftColorStyle.BLUE, fontStyle = LoftFontStyle.LARGE) {
+                val viewModel: MainActivityViewModel = viewModel()
+                LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
+                val navController: NavHostController = rememberNavController()
+                val startDestination = when (viewModel.authorized) {
+                    true -> Screens.MAIN.name
+                    else -> Screens.LOGIN.name
+                }
+                NavHost(
+                    navController = navController,
+                    startDestination = startDestination,
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    AddItemScreen(
-                        it.arguments?.getString("type"),
-                        onBackPressed = { navController.navigateUp() },
-                        hiltViewModel()
-                    )
+                    composable(Screens.LOGIN.name) { LoginScreen(navController, hiltViewModel()) }
+                    composable(Screens.MAIN.name) { MainScreen(navController, hiltViewModel()) }
+                    composable(
+                        route = "${Screens.ADD_ITEM.name}/{type}",
+                        arguments = listOf(navArgument("type") { type = NavType.StringType })
+                    ) {
+                        AddItemScreen(
+                            it.arguments?.getString("type"),
+                            onBackPressed = { navController.navigateUp() },
+                            hiltViewModel()
+                        )
+                    }
                 }
             }
         }

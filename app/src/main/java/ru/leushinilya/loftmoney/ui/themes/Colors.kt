@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 val bluePalette = LoftColors(
     income = Color(0xff7ed321),
     expense = Color(0xff3574fa),
-    primaryBackground = Color(0xff4a90e2),
+    primaryBackground = Color(0xff3574fa),
     secondaryBackground = Color(0xffffc107),
     interactionBackground = Color(0xff333f59),
     contentBackground = Color.White,

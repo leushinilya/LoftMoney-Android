@@ -17,16 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.ui.screens.Screens
+import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Composable
 fun LoginScreen(
@@ -58,7 +57,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.lightish_blue)),
+            .background(LoftTheme.colors.primaryBackground),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -72,7 +71,7 @@ fun LoginScreen(
                 viewModel.onLoginClicked(activity)
             },
             shape = RoundedCornerShape(50),
-            colors = ButtonDefaults.outlinedButtonColors(colorResource(id = R.color.white)),
+            colors = ButtonDefaults.outlinedButtonColors(LoftTheme.colors.contentBackground),
             modifier = Modifier.width(170.dp),
             contentPadding = PaddingValues(16.dp)
         ) {
@@ -83,8 +82,8 @@ fun LoginScreen(
             )
             Text(
                 text = stringResource(id = R.string.action_login),
-                color = colorResource(id = R.color.lightish_blue),
-                fontSize = 14.sp
+                color = LoftTheme.colors.primaryBackground,
+                style = LoftTheme.typography.contentNormal
             )
         }
     }

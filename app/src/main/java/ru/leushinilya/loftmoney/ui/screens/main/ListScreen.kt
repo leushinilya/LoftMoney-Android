@@ -13,17 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
+import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Composable
 fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
@@ -49,7 +46,7 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
             items(items = list, key = { it.id }) { transaction ->
                 ItemView(viewModel = viewModel, item = transaction)
                 Divider(
-                    color = colorResource(id = R.color.medium_grey),
+                    color = LoftTheme.colors.hint,
                     modifier = Modifier.alpha(0.2F)
                 )
             }
@@ -60,18 +57,13 @@ fun ListScreen(viewModel: MainViewModel, type: TransactionType) {
 
 @Composable
 fun ItemView(viewModel: MainViewModel, item: Item) {
-    val textStyle = TextStyle(
-        fontSize = 20.sp,
-        fontWeight = FontWeight.Medium
-    )
     val priceColor = when (item.type) {
-        0 -> colorResource(id = R.color.lightish_blue)
-        1 -> colorResource(id = R.color.apple_green)
-        else -> colorResource(id = R.color.medium_grey)
+        0 -> LoftTheme.colors.expense
+        else -> LoftTheme.colors.income
     }
     val backgroundColor = when (item in viewModel.selectedItems) {
-        true -> colorResource(id = R.color.selection_item_color)
-        else -> colorResource(id = R.color.white)
+        true -> LoftTheme.colors.interactionContentBackground
+        else -> LoftTheme.colors.contentBackground
     }
     Row(
         modifier = Modifier
@@ -88,12 +80,12 @@ fun ItemView(viewModel: MainViewModel, item: Item) {
     ) {
         Text(
             text = item.name,
-            color = colorResource(id = R.color.medium_grey),
-            style = textStyle
+            color = LoftTheme.colors.primaryText,
+            style = LoftTheme.typography.contentNormal
         )
         Text(
             text = item.price,
-            style = textStyle,
+            style = LoftTheme.typography.contentNormal,
             color = priceColor
         )
     }

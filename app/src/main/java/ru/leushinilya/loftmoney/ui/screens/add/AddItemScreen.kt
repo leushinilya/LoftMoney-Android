@@ -15,17 +15,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
+import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Preview
 @Composable
@@ -38,8 +36,8 @@ fun AddItemScreen(
     var name by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     val color = when (type) {
-        TransactionType.INCOME.value -> colorResource(id = R.color.apple_green)
-        TransactionType.EXPENSE.value -> colorResource(id = R.color.lightish_blue)
+        TransactionType.INCOME.value -> LoftTheme.colors.income
+        TransactionType.EXPENSE.value -> LoftTheme.colors.expense
         else -> return
     }
 
@@ -56,7 +54,7 @@ fun AddItemScreen(
 
     Box(
         modifier = Modifier
-            .background(color = colorResource(id = R.color.white))
+            .background(LoftTheme.colors.contentBackground)
             .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
@@ -69,13 +67,13 @@ fun AddItemScreen(
                 onValueChange = { name = it },
                 label = { Text(stringResource(id = R.string.edittext_title_hint)) },
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorResource(id = R.color.white),
+                    backgroundColor = LoftTheme.colors.contentBackground,
                     textColor = color,
                     focusedIndicatorColor = color,
                     focusedLabelColor = color,
                     cursorColor = color
                 ),
-                textStyle = TextStyle(fontSize = 24.sp)
+                textStyle = LoftTheme.typography.contentNormal
             )
 
             TextField(
@@ -84,13 +82,13 @@ fun AddItemScreen(
                 label = { Text(stringResource(id = R.string.edittext_price_hint)) },
                 modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16)),
                 colors = TextFieldDefaults.textFieldColors(
-                    backgroundColor = colorResource(id = R.color.white),
+                    backgroundColor = LoftTheme.colors.contentBackground,
                     textColor = color,
                     focusedIndicatorColor = color,
                     focusedLabelColor = color,
                     cursorColor = color
                 ),
-                textStyle = TextStyle(fontSize = 24.sp),
+                textStyle = LoftTheme.typography.contentNormal,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
@@ -99,14 +97,14 @@ fun AddItemScreen(
                     viewModel.onAddClicked(price.toFloat(), name, type)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = colorResource(id = R.color.white)
+                    backgroundColor = LoftTheme.colors.contentBackground
                 ),
                 modifier = Modifier.padding(top = dimensionResource(id = R.dimen.spacing_16))
             ) {
                 val buttonContentColor = if (name.isNotBlank() && price.isNotBlank()) {
                     color
                 } else {
-                    colorResource(id = R.color.white_three)
+                    LoftTheme.colors.hint
                 }
                 Image(
                     painter = painterResource(id = R.drawable.check_icon),
@@ -117,7 +115,7 @@ fun AddItemScreen(
                     stringResource(id = R.string.button_add_text),
                     color = buttonContentColor,
                     modifier = Modifier.padding(start = dimensionResource(id = R.dimen.spacing_8)),
-                    fontSize = 14.sp
+                    style = LoftTheme.typography.contentSmall
                 )
             }
 
