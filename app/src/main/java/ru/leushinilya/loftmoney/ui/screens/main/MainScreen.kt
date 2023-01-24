@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.ui.screens.Screens
+import ru.leushinilya.loftmoney.ui.screens.settings.SettingsDialog
 import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @ExperimentalPagerApi
@@ -112,6 +113,7 @@ fun MainScreen(
 @Composable
 fun TopBar() {
     var showMenu by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(
@@ -132,14 +134,14 @@ fun TopBar() {
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                 DropdownMenuItem(onClick = { /*TODO*/ }) {
                     Text(
-                        text= "Logout",
+                        text = "Logout",
                         style = LoftTheme.typography.contentSmall,
                         color = LoftTheme.colors.primaryText
                     )
                 }
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                DropdownMenuItem(onClick = { showSettings = true }) {
                     Text(
-                        text = "Themes",
+                        text = stringResource(id = R.string.settings),
                         style = LoftTheme.typography.contentSmall,
                         color = LoftTheme.colors.primaryText
                     )
@@ -147,6 +149,9 @@ fun TopBar() {
             }
         }
     )
+    if (showSettings) {
+        SettingsDialog { showSettings = false }
+    }
 }
 
 @Composable

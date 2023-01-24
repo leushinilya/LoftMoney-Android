@@ -11,5 +11,13 @@
     <string name="incomes">Доходы</string>
     <string name="balance">Баланс</string>
     <string name="fill_all_data">Заполните все данные</string>
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="settings">Настройки</string>
+    <string name="color_scheme">Цветовая схема</string>
+    <string name="font_size">Размер шрифта</string>
+    <string name="small">Маленький</string>
+    <string name="normal">Нормальный</string>
+    <string name="large">Большой</string>
 
 </resources>
