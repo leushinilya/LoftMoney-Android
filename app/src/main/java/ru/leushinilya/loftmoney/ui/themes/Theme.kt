@@ -5,21 +5,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 
 @Composable
 fun MainTheme(
-    colorStyle: LoftColorStyle,
-    fontStyle: LoftFontStyle,
+    uiSettings: UiSettings,
     content: @Composable () -> Unit
 ) {
 
-    val colors = when (colorStyle) {
-        LoftColorStyle.BLUE -> bluePalette
-        LoftColorStyle.PURPLE -> purplePalette
-        LoftColorStyle.RED -> redPalette
+    val colors = when (uiSettings.colors) {
+        LoftColors.BLUE -> blueColorSet
+        LoftColors.PURPLE -> purpleColorSet
+        LoftColors.RED -> redColorSet
     }
 
-    val typography = when (fontStyle) {
-        LoftFontStyle.SMALL -> smallTypography
-        LoftFontStyle.NORMAL -> normalTypography
-        LoftFontStyle.LARGE -> largeTypography
+    val typography = when (uiSettings.typography) {
+        LoftTypography.SMALL -> smallTypography
+        LoftTypography.NORMAL -> normalTypography
+        LoftTypography.LARGE -> largeTypography
     }
 
     CompositionLocalProvider(
@@ -28,3 +27,8 @@ fun MainTheme(
         content = content
     )
 }
+
+data class UiSettings(
+    val colors: LoftColors,
+    val typography: LoftTypography
+)

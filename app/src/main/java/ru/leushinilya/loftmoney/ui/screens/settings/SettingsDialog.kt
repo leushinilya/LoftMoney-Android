@@ -3,7 +3,6 @@ package ru.leushinilya.loftmoney.ui.screens.settings
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,6 +15,11 @@ import ru.leushinilya.loftmoney.ui.themes.*
 
 @Composable
 fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequest: () -> Unit) {
+    val uiSettings = viewModel.uiSettings.collectAsState()
+    val isShowing = viewModel.isShowing.collectAsState()
+    if (!isShowing.value) {
+        onDismissRequest()
+    }
     AlertDialog(
         onDismissRequest = { onDismissRequest() },
         title = {
@@ -27,7 +31,7 @@ fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequ
         },
         confirmButton = {
             TextButton(
-                onClick = {},
+                onClick = { viewModel.onSaveButtonClicked() },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(
@@ -62,9 +66,13 @@ fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequ
                         .fillMaxWidth()
                         .padding(top = 16.dp, start = 16.dp, end = 16.dp)
                 ) {
-                    ColorItem(bluePalette)
-                    ColorItem(redPalette)
-                    ColorItem(purplePalette)
+                    listOf(LoftColors.BLUE, LoftColors.RED, LoftColors.PURPLE).forEach {
+                        ColorItem(
+                            palette = it.colorSet,
+                            onClick = { viewModel.onColorSchemeSelected(it) },
+                            isSelected = uiSettings.value.colors == it
+                        )
+                    }
                 }
                 TypographySpinner(viewModel = viewModel)
             }
@@ -73,7 +81,7 @@ fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequ
 }
 
 @Composable
-fun ColorItem(palette: LoftColors) {
+fun ColorItem(palette: ColorSet, onClick: () -> Unit, isSelected: Boolean) {
     Button(
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(
@@ -81,10 +89,13 @@ fun ColorItem(palette: LoftColors) {
         ),
         modifier = Modifier
             .size(36.dp)
-            .border(2.dp, palette.secondaryBackground, shape = CircleShape),
-        onClick = {},
-        content = {}
-    )
+            .border(
+                if (isSelected) 2.dp else 0.dp,
+                palette.secondaryBackground,
+                shape = CircleShape
+            ),
+        onClick = { onClick() }
+    ) {}
 }
 
 @Composable
@@ -100,26 +111,24 @@ fun TypographySpinner(viewModel: SettingsViewModel) {
                 color = LoftTheme.colors.primaryText
             )
             DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(onClick = { }) {
-                    Text(
-                        text = stringResource(id = R.string.small),
-                        style = smallTypography.contentNormal,
-                        color = LoftTheme.colors.primaryText
-                    )
-                }
-                DropdownMenuItem(onClick = { }) {
-                    Text(
-                        text = stringResource(id = R.string.normal),
-                        style = normalTypography.contentNormal,
-                        color = LoftTheme.colors.primaryText
-                    )
-                }
-                DropdownMenuItem(onClick = { }) {
-                    Text(
-                        text = stringResource(id = R.string.large),
-                        style = largeTypography.contentNormal,
-                        color = LoftTheme.colors.primaryText
-                    )
+                val fonts = listOf(
+                    LoftTypography.SMALL to stringResource(id = R.string.small),
+                    LoftTypography.NORMAL to stringResource(id = R.string.normal),
+                    LoftTypography.LARGE to stringResource(id = R.string.large)
+                )
+                fonts.forEach {
+                    DropdownMenuItem(
+                        onClick = {
+                            viewModel.onTypographySelected(it.first)
+                            expanded = false
+                        }
+                    ) {
+                        Text(
+                            text = it.second,
+                            style = it.first.fontSet.contentNormal,
+                            color = LoftTheme.colors.primaryText
+                        )
+                    }
                 }
             }
         }
@@ -129,8 +138,10 @@ fun TypographySpinner(viewModel: SettingsViewModel) {
 @Preview
 @Composable
 fun SettingsDialogPreview() = MainTheme(
-    colorStyle = LoftColorStyle.BLUE,
-    fontStyle = LoftFontStyle.NORMAL
+    UiSettings(
+        colors = LoftColors.BLUE,
+        typography = LoftTypography.NORMAL
+    )
 ) {
     SettingsDialog {}
 }

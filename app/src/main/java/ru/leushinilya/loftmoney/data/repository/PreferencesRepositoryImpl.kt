@@ -1,8 +1,7 @@
 package ru.leushinilya.loftmoney.data.repository
 
 import ru.leushinilya.loftmoney.data.local.PreferencesDataSource
-import ru.leushinilya.loftmoney.ui.themes.LoftColors
-import ru.leushinilya.loftmoney.ui.themes.LoftTypography
+import ru.leushinilya.loftmoney.ui.themes.*
 import javax.inject.Inject
 
 class PreferencesRepositoryImpl @Inject constructor(
@@ -15,17 +14,12 @@ class PreferencesRepositoryImpl @Inject constructor(
     override suspend fun setAuthToken(value: String) =
         preferencesDataSource.saveString("authToken", value)
 
-    override suspend fun getColors(): LoftColors? =
-        preferencesDataSource.getObject("colors", LoftColors::class.java)
+    override suspend fun getUiSettings(): UiSettings =
+        preferencesDataSource.getObject("uiSettings", UiSettings::class.java)
+            ?: UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)
 
-    override suspend fun setColors(value: LoftColors) =
-        preferencesDataSource.saveObject("typography", value)
-
-    override suspend fun getTypography(): LoftTypography? =
-        preferencesDataSource.getObject("typography", LoftTypography::class.java)
-
-    override suspend fun setTypography(value: LoftTypography) =
-        preferencesDataSource.saveObject("typography", value)
+    override suspend fun setUiSettings(value: UiSettings) =
+        preferencesDataSource.saveObject("uiSettings", value)
 
     override suspend fun clearAll() =
         preferencesDataSource.clearAll()

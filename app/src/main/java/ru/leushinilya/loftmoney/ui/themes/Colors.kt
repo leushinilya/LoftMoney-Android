@@ -2,7 +2,7 @@ package ru.leushinilya.loftmoney.ui.themes
 
 import androidx.compose.ui.graphics.Color
 
-val bluePalette = LoftColors(
+val blueColorSet = ColorSet(
     income = Color(0xff7ed321),
     expense = Color(0xff3574fa),
     primaryBackground = Color(0xff3574fa),
@@ -14,7 +14,7 @@ val bluePalette = LoftColors(
     hint = Color(0xffeaeaea)
 )
 
-val redPalette = LoftColors(
+val redColorSet = ColorSet(
     income = Color(0xff7ed321),
     expense = Color(0xff3574fa),
     primaryBackground = Color(0xFFFF5722),
@@ -26,7 +26,7 @@ val redPalette = LoftColors(
     hint = Color(0xffeaeaea)
 )
 
-val purplePalette = LoftColors(
+val purpleColorSet = ColorSet(
     income = Color(0xff7ed321),
     expense = Color(0xff3574fa),
     primaryBackground = Color(0xFF673AB7),

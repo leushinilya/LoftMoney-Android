@@ -132,14 +132,19 @@ fun TopBar() {
                 )
             }
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                DropdownMenuItem(onClick = { /*TODO*/ }) {
+                DropdownMenuItem(onClick = { showMenu = false }) {
                     Text(
                         text = "Logout",
                         style = LoftTheme.typography.contentSmall,
                         color = LoftTheme.colors.primaryText
                     )
                 }
-                DropdownMenuItem(onClick = { showSettings = true }) {
+                DropdownMenuItem(
+                    onClick = {
+                        showSettings = true
+                        showMenu = false
+                    }
+                ) {
                     Text(
                         text = stringResource(id = R.string.settings),
                         style = LoftTheme.typography.contentSmall,

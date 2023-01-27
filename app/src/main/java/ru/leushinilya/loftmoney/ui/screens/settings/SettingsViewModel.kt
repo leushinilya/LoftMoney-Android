@@ -3,10 +3,11 @@ package ru.leushinilya.loftmoney.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import ru.leushinilya.loftmoney.data.repository.PreferencesRepository
-import ru.leushinilya.loftmoney.ui.themes.LoftColors
-import ru.leushinilya.loftmoney.ui.themes.LoftTypography
+import ru.leushinilya.loftmoney.ui.themes.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -14,16 +15,36 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
+    private val _uiSettings = MutableStateFlow(UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)).apply {
+        viewModelScope.launch {
+            val settings = preferencesRepository.getUiSettings()
+            emit(settings)
+        }
+    }
+    val uiSettings = _uiSettings.asStateFlow()
+
+    private val _isShowing = MutableStateFlow(true)
+    val isShowing = _isShowing.asStateFlow()
+
     fun onColorSchemeSelected(colors: LoftColors) {
         viewModelScope.launch {
-            preferencesRepository.setColors(colors)
+            val settings = _uiSettings.value.copy(colors = colors)
+            _uiSettings.emit(settings)
         }
     }
 
     fun onTypographySelected(typography: LoftTypography) {
         viewModelScope.launch {
-            preferencesRepository.setTypography(typography)
+            val settings = _uiSettings.value.copy(typography = typography)
+            _uiSettings.emit(settings)
         }
     }
 
+    fun onSaveButtonClicked() {
+        viewModelScope.launch {
+            preferencesRepository.setUiSettings(uiSettings.value)
+            preferencesRepository.setUiSettings(uiSettings.value)
+            _isShowing.emit(false)
+        }
+    }
 }

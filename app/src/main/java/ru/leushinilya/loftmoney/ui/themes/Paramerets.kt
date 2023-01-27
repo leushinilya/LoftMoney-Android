@@ -5,7 +5,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 
-data class LoftColors(
+data class ColorSet(
     val income: Color,
     val expense: Color,
     val primaryBackground: Color,
@@ -17,7 +17,7 @@ data class LoftColors(
     val hint: Color
 )
 
-data class LoftTypography(
+data class FontSet(
     val toolbar: TextStyle,
     val tabs: TextStyle,
     val contentSmall: TextStyle,
@@ -26,27 +26,31 @@ data class LoftTypography(
 )
 
 object LoftTheme {
-    val colors: LoftColors
+    val colors: ColorSet
         @Composable
         get() = LocalColors.current
 
-    val typography: LoftTypography
+    val typography: FontSet
         @Composable
         get() = LocalTypography.current
 }
 
-val LocalColors = staticCompositionLocalOf<LoftColors> {
+val LocalColors = staticCompositionLocalOf<ColorSet> {
     error("No colors provided")
 }
 
-val LocalTypography = staticCompositionLocalOf<LoftTypography> {
+val LocalTypography = staticCompositionLocalOf<FontSet> {
     error("No typography provided")
 }
 
-enum class LoftFontStyle {
-    SMALL, NORMAL, LARGE
+enum class LoftTypography(val fontSet: FontSet) {
+    SMALL(smallTypography),
+    NORMAL(normalTypography),
+    LARGE(largeTypography)
 }
 
-enum class LoftColorStyle {
-    BLUE, RED, PURPLE
+enum class LoftColors(val colorSet: ColorSet) {
+    BLUE(blueColorSet),
+    RED(redColorSet),
+    PURPLE(purpleColorSet)
 }
