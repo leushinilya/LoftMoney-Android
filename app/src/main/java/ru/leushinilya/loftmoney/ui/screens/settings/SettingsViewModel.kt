@@ -23,9 +23,6 @@ class SettingsViewModel @Inject constructor(
     }
     val uiSettings = _uiSettings.asStateFlow()
 
-    private val _isShowing = MutableStateFlow(true)
-    val isShowing = _isShowing.asStateFlow()
-
     fun onColorSchemeSelected(colors: LoftColors) {
         viewModelScope.launch {
             val settings = _uiSettings.value.copy(colors = colors)
@@ -43,8 +40,6 @@ class SettingsViewModel @Inject constructor(
     fun onSaveButtonClicked() {
         viewModelScope.launch {
             preferencesRepository.setUiSettings(uiSettings.value)
-            preferencesRepository.setUiSettings(uiSettings.value)
-            _isShowing.emit(false)
         }
     }
 }

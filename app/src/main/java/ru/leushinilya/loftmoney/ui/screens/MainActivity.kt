@@ -21,6 +21,7 @@ import ru.leushinilya.loftmoney.ui.screens.add.AddItemScreen
 import ru.leushinilya.loftmoney.ui.screens.login.LoginScreen
 import ru.leushinilya.loftmoney.ui.screens.main.MainScreen
 import ru.leushinilya.loftmoney.ui.themes.MainTheme
+import ru.leushinilya.loftmoney.ui.themes.UiSettings
 
 @AndroidEntryPoint
 @ExperimentalPagerApi
@@ -29,7 +30,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val viewModel: MainActivityViewModel = viewModel()
-            val uiSettings = viewModel.uiSettings.collectAsState()
+            val uiSettings = viewModel.uiSettings.collectAsState(UiSettings())
             MainTheme(uiSettings.value) {
                 LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
                 val navController: NavHostController = rememberNavController()

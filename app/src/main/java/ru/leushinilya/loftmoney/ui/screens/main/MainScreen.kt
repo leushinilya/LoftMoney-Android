@@ -135,7 +135,7 @@ fun TopBar() {
                 DropdownMenuItem(onClick = { showMenu = false }) {
                     Text(
                         text = "Logout",
-                        style = LoftTheme.typography.contentSmall,
+                        style = LoftTheme.typography.contentNormal,
                         color = LoftTheme.colors.primaryText
                     )
                 }
@@ -147,7 +147,7 @@ fun TopBar() {
                 ) {
                     Text(
                         text = stringResource(id = R.string.settings),
-                        style = LoftTheme.typography.contentSmall,
+                        style = LoftTheme.typography.contentNormal,
                         color = LoftTheme.colors.primaryText
                     )
                 }

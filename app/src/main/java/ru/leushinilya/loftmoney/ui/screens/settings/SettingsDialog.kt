@@ -16,10 +16,7 @@ import ru.leushinilya.loftmoney.ui.themes.*
 @Composable
 fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequest: () -> Unit) {
     val uiSettings = viewModel.uiSettings.collectAsState()
-    val isShowing = viewModel.isShowing.collectAsState()
-    if (!isShowing.value) {
-        onDismissRequest()
-    }
+
     AlertDialog(
         onDismissRequest = { onDismissRequest() },
         title = {
@@ -31,7 +28,10 @@ fun SettingsDialog(viewModel: SettingsViewModel = hiltViewModel(), onDismissRequ
         },
         confirmButton = {
             TextButton(
-                onClick = { viewModel.onSaveButtonClicked() },
+                onClick = {
+                    viewModel.onSaveButtonClicked()
+                    onDismissRequest()
+                },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Text(

@@ -29,6 +29,6 @@ fun MainTheme(
 }
 
 data class UiSettings(
-    val colors: LoftColors,
-    val typography: LoftTypography
+    val colors: LoftColors = LoftColors.BLUE,
+    val typography: LoftTypography = LoftTypography.NORMAL
 )

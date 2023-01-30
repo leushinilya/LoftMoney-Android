@@ -1,5 +1,6 @@
 package ru.leushinilya.loftmoney.data.repository
 
+import kotlinx.coroutines.flow.*
 import ru.leushinilya.loftmoney.data.local.PreferencesDataSource
 import ru.leushinilya.loftmoney.ui.themes.*
 import javax.inject.Inject
@@ -18,8 +19,15 @@ class PreferencesRepositoryImpl @Inject constructor(
         preferencesDataSource.getObject("uiSettings", UiSettings::class.java)
             ?: UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)
 
-    override suspend fun setUiSettings(value: UiSettings) =
+    override suspend fun setUiSettings(value: UiSettings) {
         preferencesDataSource.saveObject("uiSettings", value)
+        uiSettingsStateFlow.emit(value)
+    }
+
+    private val uiSettingsStateFlow = MutableStateFlow(UiSettings())
+    override val uiSettingsFlow: Flow<UiSettings> = uiSettingsStateFlow.map { 
+        getUiSettings()
+    }
 
     override suspend fun clearAll() =
         preferencesDataSource.clearAll()
