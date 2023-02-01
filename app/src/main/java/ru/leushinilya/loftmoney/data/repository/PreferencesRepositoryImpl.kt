@@ -15,18 +15,15 @@ class PreferencesRepositoryImpl @Inject constructor(
     override suspend fun setAuthToken(value: String) =
         preferencesDataSource.saveString("authToken", value)
 
-    override suspend fun getUiSettings(): UiSettings =
-        preferencesDataSource.getObject("uiSettings", UiSettings::class.java)
-            ?: UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)
-
     override suspend fun setUiSettings(value: UiSettings) {
         preferencesDataSource.saveObject("uiSettings", value)
         uiSettingsStateFlow.emit(value)
     }
 
     private val uiSettingsStateFlow = MutableStateFlow(UiSettings())
-    override val uiSettingsFlow: Flow<UiSettings> = uiSettingsStateFlow.map { 
-        getUiSettings()
+    override val uiSettingsFlow: Flow<UiSettings> = uiSettingsStateFlow.map {
+        preferencesDataSource.getObject("uiSettings", UiSettings::class.java)
+            ?: UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)
     }
 
     override suspend fun clearAll() =

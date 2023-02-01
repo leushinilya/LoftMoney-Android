@@ -15,12 +15,12 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _uiSettings = MutableStateFlow(UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)).apply {
-        viewModelScope.launch {
-            val settings = preferencesRepository.getUiSettings()
-            emit(settings)
+    private val _uiSettings = MutableStateFlow(UiSettings(LoftColors.BLUE, LoftTypography.NORMAL))
+        .apply {
+            viewModelScope.launch {
+                preferencesRepository.uiSettingsFlow.collect(this@apply)
+            }
         }
-    }
     val uiSettings = _uiSettings.asStateFlow()
 
     fun onColorSchemeSelected(colors: LoftColors) {

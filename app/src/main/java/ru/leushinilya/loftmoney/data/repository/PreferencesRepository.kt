@@ -8,9 +8,8 @@ interface PreferencesRepository {
     suspend fun getAuthToken(): String?
     suspend fun setAuthToken(value: String)
 
-    suspend fun getUiSettings(): UiSettings
-    suspend fun setUiSettings(value: UiSettings)
     val uiSettingsFlow: Flow<UiSettings>
+    suspend fun setUiSettings(value: UiSettings)
 
     suspend fun clearAll()
 
