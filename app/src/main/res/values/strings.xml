@@ -19,5 +19,6 @@
     <string name="small">Small</string>
     <string name="normal">Normal</string>
     <string name="large">Large</string>
+    <string name="logout">Logout</string>
 
 </resources>

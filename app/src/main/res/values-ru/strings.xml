@@ -19,5 +19,6 @@
     <string name="small">Маленький</string>
     <string name="normal">Нормальный</string>
     <string name="large">Большой</string>
+    <string name="logout">Выйти</string>
 
 </resources>

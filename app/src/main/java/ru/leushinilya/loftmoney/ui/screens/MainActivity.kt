@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,19 +28,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val viewModel: MainActivityViewModel = viewModel()
+            val viewModel: MainActivityViewModel = hiltViewModel()
             val uiSettings = viewModel.uiSettings.collectAsState(UiSettings())
-            val authorized = viewModel.authorized.collectAsState()
+            val authorized = viewModel.authorized.collectAsState(null)
             MainTheme(uiSettings.value) {
                 val navController: NavHostController = rememberNavController()
-                val startDestination = when (authorized.value) {
-                    true -> Screens.MAIN.name
-                    false -> Screens.LOGIN.name
-                    null -> Screens.EMPTY.name
-                }
                 NavHost(
                     navController = navController,
-                    startDestination = startDestination,
+                    startDestination = Screens.EMPTY.name,
                     modifier = Modifier.fillMaxSize()
                 ) {
                     composable(Screens.EMPTY.name) { Empty() }
@@ -58,11 +52,17 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
+                when (authorized.value) {
+                    true -> navController.navigate(Screens.MAIN.name)
+                    false -> navController.navigate(Screens.LOGIN.name)
+                    null -> {}
+                }
             }
         }
     }
 
     @Composable
-    fun Empty() {}
+    fun Empty() {
+    }
 
 }

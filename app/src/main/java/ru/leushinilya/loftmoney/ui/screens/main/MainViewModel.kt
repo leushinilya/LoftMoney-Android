@@ -4,7 +4,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -12,25 +13,25 @@ import ru.leushinilya.loftmoney.TransactionType
 import ru.leushinilya.loftmoney.cells.Item
 import ru.leushinilya.loftmoney.data.remote.entity.Balance
 import ru.leushinilya.loftmoney.data.repository.ItemsRepository
+import ru.leushinilya.loftmoney.data.repository.PreferencesRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val itemsRepository: ItemsRepository
-) : ViewModel(), LifecycleEventObserver {
+    private val itemsRepository: ItemsRepository,
+    private val preferencesRepository: PreferencesRepository
+) : ViewModel() {
 
-    val expenses = mutableStateListOf<Item>()
-    val incomes = mutableStateListOf<Item>()
     var selectedItems = mutableStateListOf<Item>()
     var isRefreshing by mutableStateOf(false)
-    val balance = MutableStateFlow<Balance?>(null)
-
-    override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-        if (event == Lifecycle.Event.ON_RESUME) {
-            updateExpenses()
-            updateIncomes()
-            getBalance()
-        }
+    val expenses = mutableStateListOf<Item>().apply {
+        updateExpenses()
+    }
+    val incomes = mutableStateListOf<Item>().apply {
+        updateIncomes()
+    }
+    val balance = MutableStateFlow<Balance?>(null).apply {
+        getBalance()
     }
 
     private fun getItems(transactionType: TransactionType, onSuccess: (List<Item>) -> Unit) {
@@ -80,6 +81,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun onLogoutClicked() {
+        viewModelScope.launch {
+            preferencesRepository.clearAll()
+        }
+    }
+
     private fun removeItem(item: Item) {
         viewModelScope.launch {
             try {
@@ -96,9 +103,10 @@ class MainViewModel @Inject constructor(
     private fun getBalance() {
         viewModelScope.launch {
             try {
-                balance.emit(itemsRepository.getBalance())
-            } catch (e: java.lang.Exception) {
-//                TODO show error
+                val balanceValue = itemsRepository.getBalance()
+                balance.emit(balanceValue)
+            } catch (e: Exception) {
+//                TODO(show error)
             }
         }
     }

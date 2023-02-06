@@ -11,6 +11,7 @@ interface PreferencesRepository {
     val uiSettingsFlow: Flow<UiSettings>
     suspend fun setUiSettings(value: UiSettings)
 
+    val authorizedFlow: Flow<Boolean?>
     suspend fun clearAll()
 
 }

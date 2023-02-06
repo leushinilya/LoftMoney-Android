@@ -10,12 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -33,7 +30,7 @@ import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 @Composable
 fun MainScreen(
     navController: NavController,
-    viewModel: MainViewModel = viewModel()
+    viewModel: MainViewModel
 ) {
     val screens = listOf(Screens.LIST_EXPENSES, Screens.LIST_INCOMES, Screens.DIAGRAM)
     val pagerState = rememberPagerState()
@@ -45,13 +42,16 @@ fun MainScreen(
         LoftTheme.colors.primaryBackground
     }
     systemUiController.setStatusBarColor(backgroundColor)
-    LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
     Scaffold(
         topBar = {
             if (viewModel.selectedItems.isNotEmpty()) {
-                EditingTopBar(viewModel)
+                EditingTopBar(
+                    onCancelClicked = { viewModel.onCancelClicked() },
+                    onRemoveClicked = { viewModel.onRemoveClicked() },
+                    selectedCount = viewModel.selectedItems.size
+                )
             } else {
-                TopBar()
+                TopBar { viewModel.onLogoutClicked() }
             }
         },
         floatingActionButton = {
@@ -109,9 +109,8 @@ fun MainScreen(
     }
 }
 
-@Preview
 @Composable
-fun TopBar() {
+fun TopBar(onLogoutClicked: () -> Unit) {
     var showMenu by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
     TopAppBar(
@@ -132,9 +131,14 @@ fun TopBar() {
                 )
             }
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                DropdownMenuItem(onClick = { showMenu = false }) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onLogoutClicked()
+                    }
+                ) {
                     Text(
-                        text = "Logout",
+                        text = stringResource(id = R.string.logout),
                         style = LoftTheme.typography.contentNormal,
                         color = LoftTheme.colors.primaryText
                     )
@@ -160,7 +164,11 @@ fun TopBar() {
 }
 
 @Composable
-fun EditingTopBar(viewModel: MainViewModel) {
+fun EditingTopBar(
+    onCancelClicked: () -> Unit,
+    onRemoveClicked: () -> Unit,
+    selectedCount: Int
+) {
     TopAppBar(
         backgroundColor = LoftTheme.colors.interactionBackground
     ) {
@@ -169,12 +177,10 @@ fun EditingTopBar(viewModel: MainViewModel) {
             contentDescription = "back_icon",
             modifier = Modifier
                 .padding(16.dp)
-                .clickable {
-                    viewModel.onCancelClicked()
-                }
+                .clickable { onCancelClicked() }
         )
         Text(
-            text = "${stringResource(id = R.string.tool_bar_title_selection)} ${viewModel.selectedItems.size}",
+            text = "${stringResource(id = R.string.tool_bar_title_selection)} $selectedCount",
             color = LoftTheme.colors.contentBackground,
             style = LoftTheme.typography.toolbar,
             modifier = Modifier.weight(1F)
@@ -184,9 +190,7 @@ fun EditingTopBar(viewModel: MainViewModel) {
             contentDescription = "back_trash",
             modifier = Modifier
                 .padding(16.dp)
-                .clickable {
-                    viewModel.onRemoveClicked()
-                }
+                .clickable { onRemoveClicked() }
         )
     }
 }

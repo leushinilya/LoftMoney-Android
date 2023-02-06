@@ -9,11 +9,19 @@ class PreferencesRepositoryImpl @Inject constructor(
     private val preferencesDataSource: PreferencesDataSource
 ) : PreferencesRepository {
 
+    private val authorizedStateFlow = MutableStateFlow<Boolean?>(null)
+    override val authorizedFlow = authorizedStateFlow.map {
+        val token = getAuthToken()
+        token?.isNotBlank() == true
+    }
+
     override suspend fun getAuthToken(): String? =
         preferencesDataSource.getString("authToken")
 
-    override suspend fun setAuthToken(value: String) =
+    override suspend fun setAuthToken(value: String) {
         preferencesDataSource.saveString("authToken", value)
+        authorizedStateFlow.emit(true)
+    }
 
     override suspend fun setUiSettings(value: UiSettings) {
         preferencesDataSource.saveObject("uiSettings", value)
@@ -26,7 +34,9 @@ class PreferencesRepositoryImpl @Inject constructor(
             ?: UiSettings(LoftColors.BLUE, LoftTypography.NORMAL)
     }
 
-    override suspend fun clearAll() =
+    override suspend fun clearAll() {
         preferencesDataSource.clearAll()
+        authorizedStateFlow.emit(false)
+    }
 
 }
