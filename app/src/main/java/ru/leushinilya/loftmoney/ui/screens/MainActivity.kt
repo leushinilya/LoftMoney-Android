@@ -4,9 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -31,18 +31,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: MainActivityViewModel = viewModel()
             val uiSettings = viewModel.uiSettings.collectAsState(UiSettings())
+            val authorized = viewModel.authorized.collectAsState()
             MainTheme(uiSettings.value) {
-                LocalLifecycleOwner.current.lifecycle.addObserver(viewModel)
                 val navController: NavHostController = rememberNavController()
-                val startDestination = when (viewModel.authorized) {
+                val startDestination = when (authorized.value) {
                     true -> Screens.MAIN.name
-                    else -> Screens.LOGIN.name
+                    false -> Screens.LOGIN.name
+                    null -> Screens.EMPTY.name
                 }
                 NavHost(
                     navController = navController,
                     startDestination = startDestination,
                     modifier = Modifier.fillMaxSize()
                 ) {
+                    composable(Screens.EMPTY.name) { Empty() }
                     composable(Screens.LOGIN.name) { LoginScreen(navController, hiltViewModel()) }
                     composable(Screens.MAIN.name) { MainScreen(navController, hiltViewModel()) }
                     composable(
@@ -59,4 +61,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    @Composable
+    fun Empty() {}
+
 }

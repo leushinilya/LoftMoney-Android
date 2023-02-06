@@ -3,7 +3,7 @@ package ru.leushinilya.loftmoney.ui.screens
 import ru.leushinilya.loftmoney.R
 
 enum class Screens(val titleRes: Int) {
-    SPLASH(-1),
+    EMPTY(-1),
     LOGIN(-1),
     MAIN(R.string.budget_accounting),
     LIST_EXPENSES(R.string.expences),
