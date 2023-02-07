@@ -11,7 +11,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import ru.leushinilya.loftmoney.R
 import ru.leushinilya.loftmoney.ui.screens.Screens
 import ru.leushinilya.loftmoney.ui.themes.LoftTheme
@@ -32,10 +33,13 @@ fun LoginScreen(
     navController: NavController,
     viewModel: LoginViewModel = viewModel()
 ) {
+    val googleSignClient = getGoogleSignClient(LocalContext.current as Activity)
     val authorized = viewModel.authorized.observeAsState()
     if (authorized.value == true && navController.currentDestination?.route != Screens.MAIN.name) {
         navController.navigate(Screens.MAIN.name)
         return
+    } else {
+        googleSignClient.signOut()
     }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -47,13 +51,6 @@ fun LoginScreen(
             }
         }
     )
-    val intent = viewModel.googleSignIntent.observeAsState()
-    if (intent.value != null) {
-        SideEffect {
-            launcher.launch(intent.value)
-        }
-    }
-    val activity = LocalContext.current as Activity
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -67,9 +64,7 @@ fun LoginScreen(
             modifier = Modifier.padding(100.dp)
         )
         Button(
-            onClick = {
-                viewModel.onLoginClicked(activity)
-            },
+            onClick = { launcher.launch(googleSignClient.signInIntent) },
             shape = RoundedCornerShape(50),
             colors = ButtonDefaults.outlinedButtonColors(LoftTheme.colors.contentBackground),
             modifier = Modifier.width(170.dp),
@@ -87,4 +82,11 @@ fun LoginScreen(
             )
         }
     }
+}
+
+fun getGoogleSignClient(activity: Activity): GoogleSignInClient {
+    val signOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .build()
+    return GoogleSignIn.getClient(activity, signOptions)
 }
