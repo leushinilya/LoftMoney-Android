@@ -19,26 +19,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import ru.leushinilya.loftmoney.R
-import ru.leushinilya.loftmoney.ui.screens.Screens
 import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Composable
-fun LoginScreen(
-    navController: NavController,
-    viewModel: LoginViewModel = viewModel()
-) {
+fun LoginScreen(viewModel: LoginViewModel) {
     val googleSignClient = getGoogleSignClient(LocalContext.current as Activity)
     val authorized = viewModel.authorized.observeAsState()
-    if (authorized.value == true && navController.currentDestination?.route != Screens.MAIN.name) {
-        navController.navigate(Screens.MAIN.name)
-        return
-    } else {
+    if (authorized.value != true) {
         googleSignClient.signOut()
     }
     val launcher = rememberLauncherForActivityResult(
