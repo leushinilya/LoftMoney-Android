@@ -1,5 +1,6 @@
 package ru.leushinilya.loftmoney.ui.screens.main
 
+import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -9,34 +10,63 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import ru.leushinilya.loftmoney.R
+import ru.leushinilya.loftmoney.data.remote.entity.Balance
 import ru.leushinilya.loftmoney.ui.themes.LoftTheme
 
 @Composable
 fun DiagramScreen(viewModel: MainViewModel) {
-
     val balanceState = viewModel.balance.collectAsState()
-    val incomesSum = balanceState.value?.totalIncomes ?: 0.0
-    val expensesSum = balanceState.value?.totalExpenses ?: 0.0
-    val balance = incomesSum - expensesSum
+    when (LocalConfiguration.current.orientation) {
+        Configuration.ORIENTATION_PORTRAIT -> {
+            Column {
+                Balance(
+                    balance = balanceState.value,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1F)
+                )
+                Diagram(balance = balanceState.value)
+            }
+        }
+        else -> {
+            Row {
+                Balance(
+                    balance = balanceState.value,
+                    modifier = Modifier
+                        .weight(1F)
+                        .fillMaxHeight()
+                )
+                Diagram(balance = balanceState.value)
+            }
+        }
+    }
+}
 
+@Composable
+fun Balance(balance: Balance?, modifier: Modifier) {
+    val incomesSum = balance?.totalIncomes ?: 0.0
+    val expensesSum = balance?.totalExpenses ?: 0.0
+    val totalSum = incomesSum - expensesSum
     ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(LoftTheme.colors.contentBackground)
+        modifier = modifier.background(LoftTheme.colors.contentBackground)
     ) {
-        val (available, expenses, incomes, diagram) = createRefs()
-        Column(
-            modifier = Modifier
-                .constrainAs(available) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-                .fillMaxWidth(1F)
-                .padding(16.dp)
+        val (available, expenses, incomes) = createRefs()
+        Column(modifier = Modifier
+            .constrainAs(available) {
+                top.linkTo(parent.top)
+                bottom.linkTo(expenses.top)
+                width = Dimension.matchParent
+                height = Dimension.fillToConstraints
+            }
+            .border(width = 1.dp, color = LoftTheme.colors.hint)
+            .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = stringResource(id = R.string.available_finance),
@@ -44,22 +74,23 @@ fun DiagramScreen(viewModel: MainViewModel) {
                 color = LoftTheme.colors.primaryText
             )
             Text(
-                text = balance.toString(),
+                text = totalSum.toString(),
                 style = LoftTheme.typography.contentLarge,
                 color = LoftTheme.colors.secondaryBackground
             )
         }
-
-        Column(
-            modifier = Modifier
-                .constrainAs(expenses) {
-                    top.linkTo(available.bottom)
-                    start.linkTo(parent.start)
-                    end.linkTo(incomes.start)
-                }
-                .fillMaxWidth(0.5F)
-                .border(width = 1.dp, color = LoftTheme.colors.hint)
-                .padding(16.dp)
+        Column(modifier = Modifier
+            .constrainAs(expenses) {
+                top.linkTo(available.bottom)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(incomes.start)
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            .border(width = 1.dp, color = LoftTheme.colors.hint)
+            .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = stringResource(id = R.string.expences),
@@ -73,16 +104,18 @@ fun DiagramScreen(viewModel: MainViewModel) {
             )
         }
 
-        Column(
-            modifier = Modifier
-                .constrainAs(incomes) {
-                    top.linkTo(available.bottom)
-                    start.linkTo(expenses.end)
-                    end.linkTo(parent.end)
-                }
-                .fillMaxWidth(0.5F)
-                .border(width = 1.dp, color = LoftTheme.colors.hint)
-                .padding(16.dp)
+        Column(modifier = Modifier
+            .constrainAs(incomes) {
+                top.linkTo(available.bottom)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(expenses.end)
+                end.linkTo(parent.end)
+                width = Dimension.fillToConstraints
+                height = Dimension.fillToConstraints
+            }
+            .border(width = 1.dp, color = LoftTheme.colors.hint)
+            .padding(16.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = stringResource(id = R.string.incomes),
@@ -95,36 +128,22 @@ fun DiagramScreen(viewModel: MainViewModel) {
                 color = LoftTheme.colors.income
             )
         }
-
-        Diagram(
-            modifier = Modifier
-                .constrainAs(diagram) {
-                    top.linkTo(expenses.bottom)
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(16.dp),
-            expenses = expensesSum.toFloat(),
-            incomes = incomesSum.toFloat()
-        )
     }
-
 }
 
 @Composable
-fun Diagram(
-    modifier: Modifier = Modifier,
-    expenses: Float,
-    incomes: Float
-) {
+fun Diagram(balance: Balance?) {
     val expensesColor = LoftTheme.colors.expense
     val incomesColor = LoftTheme.colors.income
+    val expenses = balance?.totalExpenses?.toFloat() ?: 0F
+    val incomes = balance?.totalIncomes?.toFloat() ?: 0F
     val expensesAngle = (expenses / (expenses + incomes) * 360)
     val incomesAngle = (incomes / (expenses + incomes) * 360)
 
     Canvas(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = Modifier
             .aspectRatio(1F)
+            .padding(16.dp)
     ) {
         drawArc(
             color = expensesColor,

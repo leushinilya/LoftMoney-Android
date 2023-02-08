@@ -133,24 +133,24 @@ fun TopBar(onLogoutClicked: () -> Unit) {
             DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                 DropdownMenuItem(
                     onClick = {
-                        showMenu = false
-                        onLogoutClicked()
-                    }
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.logout),
-                        style = LoftTheme.typography.contentNormal,
-                        color = LoftTheme.colors.primaryText
-                    )
-                }
-                DropdownMenuItem(
-                    onClick = {
                         showSettings = true
                         showMenu = false
                     }
                 ) {
                     Text(
                         text = stringResource(id = R.string.settings),
+                        style = LoftTheme.typography.contentNormal,
+                        color = LoftTheme.colors.primaryText
+                    )
+                }
+                DropdownMenuItem(
+                        onClick = {
+                            showMenu = false
+                            onLogoutClicked()
+                        }
+                        ) {
+                    Text(
+                        text = stringResource(id = R.string.logout),
                         style = LoftTheme.typography.contentNormal,
                         color = LoftTheme.colors.primaryText
                     )
